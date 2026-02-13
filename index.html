@@ -90,9 +90,17 @@
 <body>
 
 <div id="joke-overlay">
+        <audio id="audio-boisy" src="chaewon.mp3"></audio>
+        <audio id="audio-aelathea" src="gay.mp3"></audio>
         <img id="joke-gif" src="" alt="Sürpriz">
         <div id="joke-text"></div>
-        <button id="joke-close" onclick="document.getElementById('joke-overlay').style.display='none'">KAPAT</button>
+        <button id="joke-close" onclick="
+    document.getElementById('joke-overlay').style.display='none';
+    document.getElementById('audio-boisy').pause();
+    document.getElementById('audio-boisy').currentTime = 0;
+    document.getElementById('audio-aelathea').pause();
+    document.getElementById('audio-aelathea').currentTime = 0;
+">KAPAT</button>
 </div>
     
     <h1>Lost Ark Astrogem Calculator</h1>
@@ -192,11 +200,13 @@ def check_for_joke(name):
         text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
         gif.src = "chaewon.gif"
         overlay.style.display = "flex"
+        document.getElementById("audio-chaewon").play()
                 
     elif name == "Aelathea":
-        text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
+        text.innerHTML= "GAY"
         gif.src = "chaewon.gif"
         overlay.style.display = "flex"
+        document.getElementById("audio-gay").play()
     
     if name == "Abdüllrezzak":
         text.innerHTML= "REAPER 1760TAN SONRA AÇILIYOMUŞ"
@@ -541,3 +551,4 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+

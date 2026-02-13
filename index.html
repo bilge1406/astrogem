@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lost Ark Astrogem Manager - Compact UI</title>
+    <title>Lost Ark Astrogem Calculator</title>
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2023.05.1/pyscript.css" />
     <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
@@ -75,7 +75,7 @@
 </head>
 <body>
 
-    <h1>Lost Ark Astrogem Manager</h1>
+    <h1>Lost Ark Astrogem Calculator</h1>
     <div id="status-msg">Sistem Yükleniyor...</div>
 
     <div class="tabs" id="tab-container"></div>
@@ -173,9 +173,11 @@ def add_character(event=None):
                 return
             
             if new_name == "Boisy":
-                window.alert("SEN KİM KÖPEK KOSKOCA BİLGEHAN BEYİN ÇARININ İSMİNİ DEĞİŞTİRMEYE CÜRRET EDİYOSUN")
+                window.alert("NASI YAPMIŞIM SİTEYİ AMA ÇOK İYİ Dİ Mİ")
             elif new_name == "Aelathea":
                 window.alert("GAY")
+            elif new_name == "Abdüllrezzak":
+                window.alert("REAPER 1760TAN SONRA AÇILIYOMUŞ")
                 
             app_data[new_name] = {"inventory": {}, "cores": [0,0,0]}
             global current_char
@@ -504,4 +506,5 @@ except Exception as e: log_error(e)
 
 </py-script>
 </body>
+
 </html>

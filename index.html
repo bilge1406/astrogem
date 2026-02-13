@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lost Ark Astrogem Manager - GIF Edition</title>
+    <title>Lost Ark Astrogem Calculator</title>
     
     <link rel="stylesheet" href="https://pyscript.net/releases/2023.05.1/pyscript.css" />
     <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
@@ -11,15 +11,18 @@
     <style>
         body { background-color: #2c3e50; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
         
+        /* ANA DÜZEN (LAYOUT) - 3 SÜTUNLU YAPI */
         .container { 
             max-width: 1300px; 
             margin: 0 auto; 
             display: grid; 
+            /* 1. Core Ayarları (300px) | 2. Envanter (300px) | 3. Sonuçlar (Kalan tüm alan) */
             grid-template-columns: 300px 300px 1fr; 
             gap: 20px; 
             align-items: start;
         }
 
+        /* Ekran küçülürse alt alta geçsin (Mobil/Küçük ekran uyumluluğu) */
         @media (max-width: 1000px) {
             .container { grid-template-columns: 1fr; }
         }
@@ -28,10 +31,12 @@
         
         h1, h2, h3 { text-align: center; color: #ecf0f1; margin-top: 0; }
         
+        /* ENVANTER STİLLERİ */
         .gem-row { display: flex; align-items: center; margin-bottom: 8px; justify-content: space-between; }
         .gem-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 10px; color: white; border: 2px solid white; font-size: 14px; }
         input[type="number"] { width: 60px; padding: 5px; border-radius: 4px; border: none; text-align: center; font-weight: bold; font-size: 14px; }
         
+        /* INPUT VE BUTONLAR */
         select { width: 100%; padding: 8px; margin-bottom: 10px; border-radius: 4px; background: #ecf0f1; border: none; font-weight: bold; }
         label { font-weight: bold; color: #bdc3c7; display: block; margin-bottom: 3px; font-size: 14px; }
         
@@ -42,6 +47,7 @@
         .btn-hard-reset { background-color: transparent; color: #7f8c8d; border: 1px dashed #7f8c8d; margin-top: 25px; font-size: 12px; padding: 10px; } 
         .btn-hard-reset:hover { background-color: #c0392b; color: white; border-color: #c0392b; }
         
+        /* SONUÇ ALANI - YÜKSEKLİK DİNAMİK YAPILDI */
         #result-area { 
             background-color: #ecf0f1; 
             color: #2c3e50; 
@@ -49,14 +55,15 @@
             border-radius: 5px; 
             font-family: 'Consolas', monospace; 
             white-space: pre-wrap; 
-            min-height: 200px; 
-            max-height: 650px; 
+            min-height: 200px; /* Çok küçülmemesi için */
+            max-height: 650px; /* Çok uzayıp ekranı taşırmaması için */
             overflow-y: auto; 
             font-size: 15px; 
             border: 2px solid #bdc3c7; 
             box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
         }
         
+        /* SEKMELER */
         .tabs { display: flex; margin-bottom: 20px; background-color: #34495e; padding: 10px; border-radius: 8px; overflow-x: auto; gap: 5px; align-items: center; }
         .tab-btn { background-color: #95a5a6; color: #2c3e50; padding: 8px 15px; border: none; cursor: pointer; font-weight: bold; white-space: nowrap; border-radius: 4px; margin-top: 0; font-size: 13px; width: auto; }
         .tab-btn.active { background-color: #ecf0f1; color: black; border-bottom: 4px solid #2980b9; }
@@ -64,8 +71,6 @@
         
         #status-msg { text-align:center; color: #f1c40f; font-weight: bold; margin-bottom: 10px; background: #222; padding: 10px; border-radius: 5px;}
         #debug-console { margin-top: 20px; background: black; color: #e74c3c; font-family: monospace; padding: 10px; border-radius: 5px; min-height: 50px; display: none; }
-
-        /* YENİ: ŞAKA (GIF) EKRANI STİLLERİ */
         #joke-overlay {
             display: none; /* Başlangıçta gizli */
             position: fixed; 
@@ -84,13 +89,13 @@
 </head>
 <body>
 
-    <div id="joke-overlay">
+<div id="joke-overlay">
         <img id="joke-gif" src="" alt="Sürpriz">
         <div id="joke-text"></div>
         <button id="joke-close" onclick="document.getElementById('joke-overlay').style.display='none'">KAPAT</button>
-    </div>
-
-    <h1>Lost Ark Astrogem Manager</h1>
+</div>
+    
+    <h1>Lost Ark Astrogem Calculator</h1>
     <div id="status-msg">Sistem Yükleniyor...</div>
 
     <div class="tabs" id="tab-container"></div>
@@ -159,6 +164,7 @@ def log_error(e):
     err_div.style.display = "block"
     err_div.innerHTML = f"HATA:<br>{str(e)}<br>{traceback.format_exc()}"
 
+# --- SABİTLER ---
 GEM_STATS = {
     "S": {"will": 3, "pts": 5, "color": "#e74c3c"},
     "A": {"will": 3, "pts": 4, "color": "#e67e22"},
@@ -181,22 +187,24 @@ def check_for_joke(name):
     overlay = document.getElementById("joke-overlay")
     gif = document.getElementById("joke-gif")
     text = document.getElementById("joke-text")
-    
-    if name == "Boisy":
-        gif.src = "chaewon.gif"  # GitHub'a atacağın GIF'in adı
-        text.innerHTML = "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
-        overlay.style.display = "flex" # Ekranı görünür yap
-    elif name == "Aelathea":
-        gif.src = "chaewon.gif" # GitHub'a atacağın GIF'in adı
-        text.innerHTML = "<span style='font-size: 80px; color: #ff9ff3;'>GAY</span>"
-        overlay.style.display = "flex" # Ekranı görünür yap
-    if name == "Abdüllrezzak":
-        text.innerHTML = "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
-        overlay.style.display = "flex" # Ekranı görünür yap
-    if name == "Scarleon":
-        text.innerHTML = "WARDANCER GAAANNGGG"
-        overlay.style.display = "flex" 
 
+    if name == "Boisy":
+        text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
+        gif.src = "chaewon.gif"
+        overlay.style.display = "flex"
+                
+    elif name == "Aelathea":
+        text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
+        gif.src = "chaewon.gif"
+        overlay.style.display = "flex"
+    
+    if name == "Abdüllrezzak":
+        text.innerHTML= "REAPER 1760TAN SONRA AÇILIYOMUŞ"
+    
+    elif name == "Scarleon":
+        text.innerHTML= "ESO WARDANCER GAAAAAAANG"
+
+# --- DİNAMİK SEKME FONKSİYONLARI ---
 def add_character(event=None):
     try:
         new_name = window.prompt("Yeni karakterin adını girin:")
@@ -205,8 +213,7 @@ def add_character(event=None):
             if new_name in app_data:
                 window.alert("Bu isimde bir karakter zaten var!")
                 return
-            
-            # Şakayı kontrol et ve ekranda patlat
+
             check_for_joke(new_name)
                 
             app_data[new_name] = {"inventory": {}, "cores": [0,0,0]}
@@ -267,10 +274,7 @@ def rename_tab(old_name):
     try:
         new_name = window.prompt(f"Karakter adını değiştir ({old_name}):", old_name)
         if new_name and new_name.strip() and new_name != old_name:
-            
-            # Şakayı kontrol et ve ekranda patlat
             check_for_joke(new_name)
-            
             data = app_data.pop(old_name)
             app_data[new_name] = data
             global current_char
@@ -279,6 +283,7 @@ def rename_tab(old_name):
             render_tabs()
     except Exception as e: log_error(e)
 
+# --- VERİ VE YÜKLEME ---
 def load_ui_for_char(name):
     data = app_data.get(name, {"inventory": {}, "cores": [0,0,0]})
     inv = data.get("inventory", {})
@@ -321,6 +326,7 @@ def load_data():
         load_ui_for_char(current_char)
     except Exception as e: log_error(e)
 
+# --- ALGORİTMA ---
 def get_valid_combos(cap, inventory, available_types, target_score):
     all_combos = []
     for r in range(1, 5):

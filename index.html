@@ -11,11 +11,8 @@
 
     <style>
         body { 
-            background-color: #0f172a; 
-            color: #f8fafc; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding: 20px 20px 60px 20px; 
+            background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 20px 20px 60px 20px; 
             background-image: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
             background-attachment: fixed;
         }
@@ -29,23 +26,14 @@
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 14px; margin-bottom: 25px; letter-spacing: 0.5px;}
         
-        .container { 
-            max-width: 1400px; margin: 0 auto; display: grid; 
-            grid-template-columns: 320px 320px 1fr; gap: 25px; align-items: start;
-        }
-
+        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 320px 1fr; gap: 25px; align-items: start; }
         @media (max-width: 1100px) { .container { grid-template-columns: 1fr; } }
 
         .panel { 
             background-color: #1e293b; padding: 25px; border-radius: 16px; border: 1px solid #334155; 
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2); position: relative; overflow: hidden;
         }
-        
-        .panel::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(to right, #334155, #475569);
-        }
-
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, #334155, #475569); }
         .panel:nth-child(1)::before { background: linear-gradient(to right, #f59e0b, #ef4444); } 
         .panel:nth-child(2)::before { background: linear-gradient(to right, #3b82f6, #8b5cf6); } 
         .panel:nth-child(3)::before { background: linear-gradient(to right, #10b981, #3b82f6); } 
@@ -53,44 +41,21 @@
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 20px;}
         
         /* ENVANTER GRUPLAMA STİLLERİ */
-        .w-row {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;
-            background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #1e293b;
-        }
-        .w-label {
-            width: 100%; font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 10px;
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px;
-        }
-        .gem-box {
-            display: flex; flex-direction: column; align-items: center; background: #0f172a;
-            padding: 10px 6px; border-radius: 10px; border: 1px solid #334155;
-            width: calc(25% - 6px); box-sizing: border-box; transition: all 0.2s ease;
-        }
+        .w-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #1e293b; }
+        .w-label { width: 100%; font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px; }
+        .gem-box { display: flex; flex-direction: column; align-items: center; background: #0f172a; padding: 10px 6px; border-radius: 10px; border: 1px solid #334155; width: calc(25% - 6px); box-sizing: border-box; transition: all 0.2s ease; }
         .gem-box:hover { border-color: #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
-        .gem-icon { 
-            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-weight: 800; color: white; font-size: 14px; margin: 0 0 6px 0; cursor: pointer;
-            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            transition: transform 0.1s;
-        }
+        .gem-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 14px; margin: 0 0 6px 0; cursor: pointer; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transition: transform 0.1s; }
         .gem-icon:active { transform: scale(0.9) translateY(2px); }
         .gem-pts { font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-weight: 700; }
         .gem-box input[type="number"] { width: 100%; padding: 6px 0; font-size: 14px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
         .gem-box input[type="number"]:focus { outline: none; border-color: #38bdf8; }
         
-        select { 
-            width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif;
-            background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; 
-        }
+        select { width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
         label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
         
-        button { 
-            width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; 
-            font-weight: 700; cursor: pointer; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
-        }
+        button { width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 20px;} 
         .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #34d399, #10b981); }
         .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } 
@@ -100,13 +65,7 @@
         .btn-hard-reset { background-color: transparent; color: #64748b; border: 1px dashed #475569; margin-top: 30px; font-size: 12px; padding: 12px; box-shadow: none; } 
         .btn-hard-reset:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); }
         
-        #result-area { 
-            background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
-            font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; 
-            min-height: 200px; max-height: 650px; overflow-y: auto; font-size: 14px; line-height: 1.5;
-            border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
+        #result-area { background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; min-height: 200px; max-height: 650px; overflow-y: auto; font-size: 14px; line-height: 1.5; border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
@@ -121,11 +80,7 @@
         
         #debug-console { margin-top: 20px; background: #000; color: #ef4444; font-family: monospace; padding: 15px; border-radius: 8px; border: 1px solid #ef4444; min-height: 50px; display: none; }
         
-        #joke-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px);
-            z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
-        }
+        #joke-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         #joke-gif { max-width: 80%; max-height: 60vh; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #38bdf8; }
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
         #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
@@ -153,7 +108,6 @@
     <div class="tabs" id="tab-container"></div>
 
     <div class="container">
-        
         <div class="panel">
             <h2>Core Ayarları</h2>
             <label>Sun Core:</label>
@@ -184,7 +138,7 @@
                 <button id="btn-delete-char" class="btn-delete">🗑️ ÇARI SİL</button>
             </div>
 
-            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FABRİKA AYARLARI (Tüm Verileri Sil)</button>
+            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FABRİKA AYARLARI</button>
         </div>
 
         <div class="panel">
@@ -196,7 +150,6 @@
             <h2>Analiz Sonuçları</h2>
             <div id="result-area">Sonuçlar burada görünecek...</div>
         </div>
-
     </div>
 
     <div id="debug-console">Hata Konsolu: Temiz</div>
@@ -210,9 +163,12 @@ from pyodide.ffi import create_proxy
 import traceback
 
 def log_error(e):
-    err_div = document.getElementById("debug-console")
-    err_div.style.display = "block"
-    err_div.innerHTML = f"HATA:<br>{str(e)}<br>{traceback.format_exc()}"
+    try:
+        err_div = document.getElementById("debug-console")
+        if err_div:
+            err_div.style.display = "block"
+            err_div.innerHTML = "HATA:<br>" + str(e) + "<br>" + str(traceback.format_exc())
+    except: pass
 
 GEM_STATS = {
     "S": {"will": 3, "pts": 5, "color": "#ef4444"},
@@ -244,36 +200,40 @@ app_data = {}
 ui_proxies = []
 
 def check_for_joke(name):
-    overlay = document.getElementById("joke-overlay")
-    gif = document.getElementById("joke-gif")
-    text = document.getElementById("joke-text")
-
-    if name == "Boisy":
-        text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
-        gif.src = "chaewon.gif"
-        overlay.style.display = "flex"
-        document.getElementById("audio-chaewon").play()
-                
-    elif name == "Aelathea":
-        text.innerHTML= "GAY"
-        gif.src = "chuu.gif"
-        overlay.style.display = "flex"
-        document.getElementById("audio-gay").play()
-    
-    elif name == "Abdüllrezzak":
-        text.innerHTML= "REAPER 1760TAN SONRA AÇILIYOMUŞ"
-        gif.src = "reaper.gif"
-        overlay.style.display = "flex"
-    
-    elif name == "Scarleon":
-        text.innerHTML= "ESO WARDANCER GAAAAAAANG"
-        gif.src = "backattack.gif"
-        overlay.style.display = "flex"
+    try:
+        overlay = document.getElementById("joke-overlay")
+        gif = document.getElementById("joke-gif")
+        text = document.getElementById("joke-text")
         
-    elif name == "Tarawah":
-        text.innerHTML= "BEN Mİ DEDİM REAPER OYNA DİYE"
-        gif.src = "backattack.gif"
-        overlay.style.display = "flex"
+        if not overlay or not gif or not text: return
+
+        if name == "Boisy":
+            text.innerHTML= "NASI SİTE YAPMIŞIM AMA ÇOK İYİ Dİ Mİ"
+            gif.src = "chaewon.gif"
+            overlay.style.display = "flex"
+            document.getElementById("audio-chaewon").play()
+                    
+        elif name == "Aelathea":
+            text.innerHTML= "GAY"
+            gif.src = "chuu.gif"
+            overlay.style.display = "flex"
+            document.getElementById("audio-gay").play()
+        
+        elif name == "Abdüllrezzak":
+            text.innerHTML= "REAPER 1760TAN SONRA AÇILIYOMUŞ"
+            gif.src = "reaper.gif"
+            overlay.style.display = "flex"
+        
+        elif name == "Scarleon":
+            text.innerHTML= "ESO WARDANCER GAAAAAAANG"
+            gif.src = "backattack.gif"
+            overlay.style.display = "flex"
+            
+        elif name == "Tarawah":
+            text.innerHTML= "BEN Mİ DEDİM REAPER OYNA DİYE"
+            gif.src = "backattack.gif"
+            overlay.style.display = "flex"
+    except Exception as e: log_error(e)
 
 def add_character(event=None):
     try:
@@ -291,13 +251,13 @@ def add_character(event=None):
             save_data()
             render_tabs()
             load_ui_for_char(current_char)
-            document.getElementById("result-area").innerHTML = f"--- '{current_char}' oluşturuldu ---"
+            document.getElementById("result-area").innerHTML = "--- '" + current_char + "' oluşturuldu ---"
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
     global current_char
     try:
-        if window.confirm(f"'{current_char}' isimli karakteri silmek istediğinize emin misiniz?"):
+        if window.confirm("'" + current_char + "' isimli karakteri silmek istediğinize emin misiniz?"):
             del app_data[current_char]
             if not app_data:
                 app_data["Karakter 1"] = {"inventory": {}, "cores": [0,0,0]}
@@ -305,7 +265,7 @@ def delete_character(event=None):
             save_data()
             render_tabs()
             load_ui_for_char(current_char)
-            document.getElementById("result-area").innerHTML = f"Karakter silindi.\n--- {current_char} Yüklendi ---"
+            document.getElementById("result-area").innerHTML = "Karakter silindi.\n--- " + current_char + " Yüklendi ---"
     except Exception as e: log_error(e)
 
 def switch_tab_event(event):
@@ -318,30 +278,33 @@ def rename_tab_event(event):
 
 def render_tabs():
     global ui_proxies
-    container = document.getElementById("tab-container")
-    container.innerHTML = ""
-    for name in app_data.keys():
-        btn = document.createElement("button")
-        btn.innerText = name
-        btn.className = "tab-btn"
-        if name == current_char: btn.classList.add("active")
-        btn.setAttribute("data-name", name)
-        
-        c_proxy = create_proxy(switch_tab_event)
-        d_proxy = create_proxy(rename_tab_event)
-        ui_proxies.extend([c_proxy, d_proxy])
-        
-        btn.addEventListener("click", c_proxy)
-        btn.addEventListener("dblclick", d_proxy)
-        container.appendChild(btn)
-        
-    add_btn = document.createElement("button")
-    add_btn.innerText = "➕ Ekle"
-    add_btn.className = "tab-btn add-tab-btn"
-    a_proxy = create_proxy(add_character)
-    ui_proxies.append(a_proxy)
-    add_btn.addEventListener("click", a_proxy)
-    container.appendChild(add_btn)
+    try:
+        container = document.getElementById("tab-container")
+        if not container: return
+        container.innerHTML = ""
+        for name in app_data.keys():
+            btn = document.createElement("button")
+            btn.innerText = name
+            btn.className = "tab-btn"
+            if name == current_char: btn.classList.add("active")
+            btn.setAttribute("data-name", name)
+            
+            c_proxy = create_proxy(switch_tab_event)
+            d_proxy = create_proxy(rename_tab_event)
+            ui_proxies.extend([c_proxy, d_proxy])
+            
+            btn.addEventListener("click", c_proxy)
+            btn.addEventListener("dblclick", d_proxy)
+            container.appendChild(btn)
+            
+        add_btn = document.createElement("button")
+        add_btn.innerText = "➕ Ekle"
+        add_btn.className = "tab-btn add-tab-btn"
+        a_proxy = create_proxy(add_character)
+        ui_proxies.append(a_proxy)
+        add_btn.addEventListener("click", a_proxy)
+        container.appendChild(add_btn)
+    except Exception as e: log_error(e)
 
 def switch_tab(new_name):
     global current_char
@@ -350,12 +313,12 @@ def switch_tab(new_name):
         current_char = new_name
         render_tabs()
         load_ui_for_char(current_char)
-        document.getElementById("result-area").innerHTML = f"--- {current_char} Yüklendi ---"
+        document.getElementById("result-area").innerHTML = "--- " + current_char + " Yüklendi ---"
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
     try:
-        new_name = window.prompt(f"Karakter adını değiştir ({old_name}):", old_name)
+        new_name = window.prompt("Karakter adını değiştir (" + old_name + "):", old_name)
         if new_name and new_name.strip() and new_name != old_name:
             check_for_joke(new_name)
             data = app_data.pop(old_name)
@@ -367,32 +330,45 @@ def rename_tab(old_name):
     except Exception as e: log_error(e)
 
 def load_ui_for_char(name):
-    data = app_data.get(name, {"inventory": {}, "cores": [0,0,0]})
-    inv = data.get("inventory", {})
-    cores = data.get("cores", [0,0,0])
-    for code in GEM_STATS:
-        el = document.getElementById(f"gem_{code}")
-        if el: el.value = inv.get(code, 0)
-    document.getElementById("core1").selectedIndex = cores[0]
-    document.getElementById("core2").selectedIndex = cores[1]
-    document.getElementById("core3").selectedIndex = cores[2]
+    try:
+        data = app_data.get(name, {"inventory": {}, "cores": [0,0,0]})
+        inv = data.get("inventory", {})
+        cores = data.get("cores", [0,0,0])
+        for code in GEM_STATS:
+            el = document.getElementById("gem_" + code)
+            if el: el.value = inv.get(code, 0)
+        
+        c1 = document.getElementById("core1")
+        if c1: c1.selectedIndex = cores[0]
+        c2 = document.getElementById("core2")
+        if c2: c2.selectedIndex = cores[1]
+        c3 = document.getElementById("core3")
+        if c3: c3.selectedIndex = cores[2]
+    except Exception as e: log_error(e)
 
 def get_ui_data():
     inv = {}
-    for code in GEM_STATS:
-        el = document.getElementById(f"gem_{code}")
-        val = el.value
-        inv[code] = int(val) if val else 0
-    return {"inventory": inv, "cores": [
-        document.getElementById("core1").selectedIndex,
-        document.getElementById("core2").selectedIndex,
-        document.getElementById("core3").selectedIndex
-    ]}
+    try:
+        for code in GEM_STATS:
+            el = document.getElementById("gem_" + code)
+            if el:
+                val = el.value
+                inv[code] = int(val) if val else 0
+        return {"inventory": inv, "cores": [
+            document.getElementById("core1").selectedIndex,
+            document.getElementById("core2").selectedIndex,
+            document.getElementById("core3").selectedIndex
+        ]}
+    except Exception as e: 
+        log_error(e)
+        return {"inventory": {}, "cores": [0,0,0]}
 
 def save_data():
     global app_data
-    app_data[current_char] = get_ui_data()
-    localStorage.setItem("astrogem_data", json.dumps(app_data))
+    try:
+        app_data[current_char] = get_ui_data()
+        localStorage.setItem("astrogem_data", json.dumps(app_data))
+    except Exception as e: log_error(e)
 
 def load_data():
     global app_data, current_char
@@ -410,64 +386,71 @@ def load_data():
 
 def get_valid_combos(cap, inventory, available_types, t1, t2, t3):
     all_combos = [{"pts": 0, "will": 0, "gems": [], "counts": {}}]
-    for r in range(1, 5):
-        for combo_tuple in combinations_with_replacement(available_types, r):
-            w = sum(GEM_STATS[g]["will"] for g in combo_tuple)
-            if w > cap: continue
-            counts = Counter(combo_tuple)
-            if all(inventory.get(g, 0) >= c for g, c in counts.items()):
-                p = sum(GEM_STATS[g]["pts"] for g in combo_tuple)
-                all_combos.append({"pts": p, "will": w, "gems": list(combo_tuple), "counts": dict(counts)})
+    try:
+        for r in range(1, 5):
+            for combo_tuple in combinations_with_replacement(available_types, r):
+                w = sum(GEM_STATS[g]["will"] for g in combo_tuple)
+                if w > cap: continue
+                counts = Counter(combo_tuple)
+                if all(inventory.get(g, 0) >= c for g, c in counts.items()):
+                    p = sum(GEM_STATS[g]["pts"] for g in combo_tuple)
+                    all_combos.append({"pts": p, "will": w, "gems": list(combo_tuple), "counts": dict(counts)})
 
-    primary_combos = [c for c in all_combos if c['pts'] >= t1]
-    secondary_combos = [c for c in all_combos if t2 <= c['pts'] < t1]
-    tertiary_combos = [c for c in all_combos if t3 <= c['pts'] < t2]
-    fail_combos = [c for c in all_combos if c['pts'] < t3]
+        primary_combos = [c for c in all_combos if c['pts'] >= t1]
+        secondary_combos = [c for c in all_combos if t2 <= c['pts'] < t1]
+        tertiary_combos = [c for c in all_combos if t3 <= c['pts'] < t2]
+        fail_combos = [c for c in all_combos if c['pts'] < t3]
 
-    primary_greedy = sorted(primary_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
-    primary_humble = sorted(primary_combos, key=lambda x: (x["pts"], len(x["gems"])))  
-    secondary_greedy = sorted(secondary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
-    secondary_cheap = sorted(secondary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
-    tertiary_greedy = sorted(tertiary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
-    tertiary_cheap = sorted(tertiary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
-    fail_greedy = sorted(fail_combos, key=lambda x: (-x["pts"], len(x["gems"])))
-    fail_cheap = sorted(fail_combos, key=lambda x: (len(x["gems"]), x["pts"]))
+        primary_greedy = sorted(primary_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
+        primary_humble = sorted(primary_combos, key=lambda x: (x["pts"], len(x["gems"])))  
+        secondary_greedy = sorted(secondary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+        secondary_cheap = sorted(secondary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
+        tertiary_greedy = sorted(tertiary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+        tertiary_cheap = sorted(tertiary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
+        fail_greedy = sorted(fail_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+        fail_cheap = sorted(fail_combos, key=lambda x: (len(x["gems"]), x["pts"]))
 
-    final_pool = []
-    seen = set()
+        final_pool = []
+        seen = set()
 
-    def add_to_pool(lst, count):
-        added = 0
-        for item in lst:
-            if added >= count: break
-            t = tuple(sorted(item['gems']))
-            if t not in seen:
-                final_pool.append(item)
-                seen.add(t)
-                added += 1
-    
-    add_to_pool(primary_humble, 40) 
-    add_to_pool(primary_greedy, 40) 
-    add_to_pool(secondary_greedy, 30) 
-    add_to_pool(secondary_cheap, 20) 
-    add_to_pool(tertiary_greedy, 30) 
-    add_to_pool(tertiary_cheap, 20) 
-    add_to_pool(fail_greedy, 15)
-    add_to_pool(fail_cheap, 15)
-    
-    return final_pool
+        def add_to_pool(lst, count):
+            added = 0
+            for item in lst:
+                if added >= count: break
+                t = tuple(sorted(item['gems']))
+                if t not in seen:
+                    final_pool.append(item)
+                    seen.add(t)
+                    added += 1
+        
+        add_to_pool(primary_humble, 40) 
+        add_to_pool(primary_greedy, 40) 
+        add_to_pool(secondary_greedy, 30) 
+        add_to_pool(secondary_cheap, 20) 
+        add_to_pool(tertiary_greedy, 30) 
+        add_to_pool(tertiary_cheap, 20) 
+        add_to_pool(fail_greedy, 15)
+        add_to_pool(fail_cheap, 15)
+        
+        return final_pool
+    except Exception as e:
+        log_error(e)
+        return [{"pts": 0, "will": 0, "gems": [], "counts": {}}]
         
 def calculate_click(event):
     try:
         save_data()
         res_div = document.getElementById("result-area")
+        if not res_div: return
         res_div.innerHTML = "Hesaplanıyor... Lütfen bekleyin."
         
         inventory = {}
         for code in GEM_STATS:
             try:
-                val = int(document.getElementById(f"gem_{code}").value)
-                if val > 0: inventory[code] = val
+                el = document.getElementById("gem_" + code)
+                if el:
+                    val = int(el.value)
+                    if val > 0: inventory[code] = val
             except: pass
         
         core_caps = []
@@ -475,11 +458,13 @@ def calculate_click(event):
         secondaries = []
         tertiaries = []
         for i in range(1, 4):
-            val = int(document.getElementById(f"core{i}").value)
-            core_caps.append(val)
-            primaries.append(TARGET_SCORES[val])
-            secondaries.append(SECONDARY_SCORES[val])
-            tertiaries.append(TERTIARY_SCORES[val])
+            el = document.getElementById("core" + str(i))
+            if el:
+                val = int(el.value)
+                core_caps.append(val)
+                primaries.append(TARGET_SCORES[val])
+                secondaries.append(SECONDARY_SCORES[val])
+                tertiaries.append(TERTIARY_SCORES[val])
         
         available_types = list(inventory.keys())
         if not available_types:
@@ -572,8 +557,8 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        output = f"=== {current_char} SONUÇLARI ===\n"
-        output += f"TOPLAM PUAN: {best_score}\n"
+        output = "=== " + current_char + " SONUÇLARI ===\n"
+        output += "TOPLAM PUAN: " + str(best_score) + "\n"
         
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
@@ -594,15 +579,15 @@ def calculate_click(event):
             if pts >= p_target:
                 status = "✅"
             elif pts >= s_target:
-                status = f"⚠️ (Ara Hedef {s_target}P)"
+                status = "⚠️ (Ara Hedef " + str(s_target) + "P)"
             elif pts >= t_target:
-                status = f"⚠️ (Ara Hedef {t_target}P)"
+                status = "⚠️ (Ara Hedef " + str(t_target) + "P)"
             else:
                 status = "❌"
             
-            output += f"\n{core_names[i]} ({cap}W): {pts}/{p_target} {status}\n"
-            gem_str = "+".join(res['gems']) if res['gems'] else 'BOŞ'
-            output += f"Tak: {gem_str}\n"
+            output += "\n" + core_names[i] + " (" + str(cap) + "W): " + str(pts) + "/" + str(p_target) + " " + status + "\n"
+            gem_str = "+".join(res['gems']) if res['gems'] else "BOŞ"
+            output += "Tak: " + gem_str + "\n"
             
             if pts < p_target:
                 output += "[ÖNERİLER]\n"
@@ -645,8 +630,8 @@ def calculate_click(event):
                         cnt += 1
                         
                         miss_str = ",".join(s['miss']) if s['miss'] else "Envanterde var (Boşta)"
-                        output += f" 1. Bul: {miss_str}\n"
-                        output += f"    Hedef: {'+'.join(s['combo'])} ({s['will']}W)\n"
+                        output += " 1. Bul: " + miss_str + "\n"
+                        output += "    Hedef: " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
                         if cnt >= 1: break
             output += "-"*30 + "\n"
         
@@ -657,9 +642,10 @@ def calculate_click(event):
 def reset_click(event):
     try:
         for code in GEM_STATS:
-            el = document.getElementById(f"gem_{code}")
+            el = document.getElementById("gem_" + code)
             if el: el.value = 0
-        document.getElementById("result-area").innerHTML = "Sayılar Sıfırlandı."
+        res_div = document.getElementById("result-area")
+        if res_div: res_div.innerHTML = "Sayılar Sıfırlandı."
         save_data()
     except Exception as e: log_error(e)
 
@@ -668,64 +654,93 @@ def hard_reset_click(event):
         localStorage.removeItem("astrogem_data")
         window.location.reload()
 
-# YENİ ENVANTER GRUPLAMA VE OLAY DİNLEYİCİLERİ
+# --- MODULE LEVEL OLAY YARDIMCILARI ---
+def increment_gem(event):
+    try:
+        code = event.currentTarget.id.split("_")[1]
+        el = document.getElementById("gem_" + code)
+        if el:
+            val = el.value
+            el.value = int(val) + 1 if val else 1
+            save_data()
+    except Exception as e: log_error(e)
+
+def on_gem_change(event):
+    try:
+        save_data()
+    except Exception as e: log_error(e)
+
+# --- SİSTEM BAŞLATMA VE DOM ATAMALARI ---
 try:
     gem_container = document.getElementById("gem-inputs")
-    
-    # Taşları Willpower'a göre grupla
-    w_groups = {}
-    for code, stats in GEM_STATS.items():
-        w = stats['will']
-        if w not in w_groups: w_groups[w] = []
-        w_groups[w].append((code, stats))
-        
-    html_str = ""
-    for w in sorted(w_groups.keys()):
-        html_str += f"<div class='w-row'><div class='w-label'>{w} WİLLPOWER CORE GEMLERİ</div>"
-        for code, stats in w_groups[w]:
-            html_str += f'''
-            <div class="gem-box">
-                <div class="gem-icon" style="background-color: {stats['color']}" id="icon_{code}" title="Tıkla ve 1 Ekle">{code}</div>
-                <div class="gem-pts">{stats['pts']}P</div>
-                <input type="number" id="gem_{code}" min="0" value="0">
-            </div>
-            '''
-        html_str += "</div>"
-        
-    gem_container.innerHTML = html_str
-
-    def increment_gem(event):
-        code = event.currentTarget.id.split("_")[1]
-        el = document.getElementById(f"gem_{code}")
-        val = el.value
-        el.value = int(val) + 1 if val else 1
-        save_data()
+    if gem_container:
+        w_groups = {}
+        for code, stats in GEM_STATS.items():
+            w = stats['will']
+            if w not in w_groups: w_groups[w] = []
+            w_groups[w].append((code, stats))
+            
+        html_str = ""
+        for w in sorted(w_groups.keys()):
+            html_str += "<div class='w-row'><div class='w-label'>" + str(w) + " WİLLPOWER CORE GEMLERİ</div>"
+            for code, stats in w_groups[w]:
+                color = stats['color']
+                pts = stats['pts']
+                html_str += "<div class='gem-box'>"
+                html_str += "<div class='gem-icon' style='background-color: " + color + "' id='icon_" + code + "' title='Tıkla ve 1 Ekle'>" + code + "</div>"
+                html_str += "<div class='gem-pts'>" + str(pts) + "P</div>"
+                html_str += "<input type='number' id='gem_" + code + "' min='0' value='0'>"
+                html_str += "</div>"
+            html_str += "</div>"
+            
+        gem_container.innerHTML = html_str
 
     for code in GEM_STATS.keys():
-        icon_el = document.getElementById(f"icon_{code}")
-        i_proxy = create_proxy(increment_gem)
-        ui_proxies.append(i_proxy)
-        icon_el.addEventListener("click", i_proxy)
+        icon_el = document.getElementById("icon_" + code)
+        if icon_el:
+            i_proxy = create_proxy(increment_gem)
+            ui_proxies.append(i_proxy)
+            icon_el.addEventListener("click", i_proxy)
         
-        input_el = document.getElementById(f"gem_{code}")
-        change_proxy = create_proxy(lambda e: save_data())
-        ui_proxies.append(change_proxy)
-        input_el.addEventListener("change", change_proxy)
+        input_el = document.getElementById("gem_" + code)
+        if input_el:
+            change_proxy = create_proxy(on_gem_change)
+            ui_proxies.append(change_proxy)
+            input_el.addEventListener("change", change_proxy)
 
     load_data()
-    calc_proxy = create_proxy(calculate_click)
-    reset_proxy = create_proxy(reset_click)
-    delete_proxy = create_proxy(delete_character)
-    hard_reset_proxy = create_proxy(hard_reset_click)
     
-    document.getElementById("btn-calculate").addEventListener("click", calc_proxy)
-    document.getElementById("btn-reset").addEventListener("click", reset_proxy)
-    document.getElementById("btn-delete-char").addEventListener("click", delete_proxy)
-    document.getElementById("btn-hard-reset").addEventListener("click", hard_reset_proxy)
+    calc_btn = document.getElementById("btn-calculate")
+    if calc_btn:
+        calc_proxy = create_proxy(calculate_click)
+        ui_proxies.append(calc_proxy)
+        calc_btn.addEventListener("click", calc_proxy)
+        
+    reset_btn = document.getElementById("btn-reset")
+    if reset_btn:
+        reset_proxy = create_proxy(reset_click)
+        ui_proxies.append(reset_proxy)
+        reset_btn.addEventListener("click", reset_proxy)
+        
+    del_btn = document.getElementById("btn-delete-char")
+    if del_btn:
+        delete_proxy = create_proxy(delete_character)
+        ui_proxies.append(delete_proxy)
+        del_btn.addEventListener("click", delete_proxy)
+        
+    hard_reset_btn = document.getElementById("btn-hard-reset")
+    if hard_reset_btn:
+        hard_reset_proxy = create_proxy(hard_reset_click)
+        ui_proxies.append(hard_reset_proxy)
+        hard_reset_btn.addEventListener("click", hard_reset_proxy)
     
-    document.getElementById("status-msg").innerHTML = "Sistem Hazır! 🎉"
-    document.getElementById("status-msg").style.color = "#10b981"
-except Exception as e: log_error(e)
+    status_msg = document.getElementById("status-msg")
+    if status_msg:
+        status_msg.innerHTML = "Sistem Hazır! 🎉"
+        status_msg.style.color = "#10b981"
+
+except Exception as e: 
+    log_error(e)
 
 </py-script>
 </body>

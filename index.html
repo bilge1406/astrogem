@@ -15,7 +15,7 @@
             margin: 0; padding: 15px; 
             background-image: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
             background-attachment: fixed;
-            overflow-x: hidden; /* Sağa sola kaymayı engeller */
+            overflow-x: hidden;
         }
         
         h1 { 
@@ -27,14 +27,13 @@
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 13px; margin-bottom: 15px; letter-spacing: 0.5px;}
         
-        /* 3 SÜTUNLU KOMPAKT YAPI */
         .container { max-width: 1450px; margin: 0 auto; display: grid; grid-template-columns: 260px 480px 1fr; gap: 15px; align-items: start; }
         @media (max-width: 1150px) { .container { grid-template-columns: 1fr; } }
 
         .panel { 
             background-color: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid #334155; 
             box-shadow: 0 8px 20px -5px rgba(0,0,0,0.3); position: relative; overflow: hidden;
-            max-height: 85vh; overflow-y: auto; /* Kendi içinde kayar, sayfayı uzatmaz */
+            max-height: 85vh; overflow-y: auto;
         }
         .panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; }
         .panel:nth-child(1)::before { background: linear-gradient(to right, #f59e0b, #ef4444); } 
@@ -43,10 +42,9 @@
         
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 15px;}
         
-        /* ENVANTER GRUPLAMA STİLLERİ (Ekstra Daraltıldı) */
         #gem-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .w-row { display: flex; flex-wrap: wrap; gap: 6px; background: rgba(15, 23, 42, 0.4); padding: 10px 8px; border-radius: 10px; border: 1px solid #1e293b; align-content: flex-start;}
-        .w-label { width: 100%; font-size: 12px; font-weight: 800; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px; text-align: center;} /* ORTALANDI */
+        .w-label { width: 100%; font-size: 12px; font-weight: 800; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px; text-align: center;}
         
         .gem-box { display: flex; flex-direction: column; align-items: center; background: #0f172a; padding: 6px 4px; border-radius: 8px; border: 1px solid #334155; width: calc(25% - 4.5px); box-sizing: border-box; transition: all 0.2s ease; }
         .gem-box:hover { border-color: #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
@@ -57,7 +55,6 @@
         .gem-box input[type="number"] { width: 100%; padding: 4px 0; font-size: 13px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
         .gem-box input[type="number"]:focus { outline: none; border-color: #38bdf8; }
         
-        /* ARAYÜZ ELEMANLARI */
         select { width: 100%; margin-bottom: 12px; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
         label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
@@ -72,38 +69,32 @@
         .btn-hard-reset { background-color: transparent; color: #64748b; border: 1px dashed #475569; margin-top: 20px; font-size: 10px; padding: 8px; box-shadow: none; } 
         .btn-hard-reset:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); }
         
-        /* SEKMELER */
         .tabs { display: flex; margin-bottom: 20px; background-color: transparent; padding: 0; overflow-x: auto; gap: 8px; align-items: center; justify-content: center; }
         .tab-btn { background-color: #1e293b; color: #94a3b8; padding: 8px 16px; border: 1px solid #334155; border-radius: 20px; font-weight: 600; font-size: 12px; width: auto; margin: 0; text-transform: none; letter-spacing: normal; }
         .tab-btn:hover { background-color: #334155; color: white; }
         .tab-btn.active { background: linear-gradient(135deg, #38bdf8, #3b82f6); color: white; border: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
         .add-tab-btn { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px dashed #10b981; }
         
-        /* SCROLLBAR */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; border-radius: 3px; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
-        /* YENİ SONUÇ KARTLARI STİLLERİ */
-        #result-area { font-family: 'Inter', sans-serif; font-size: 13px; }
-        .res-header { text-align:center; padding-bottom:10px; border-bottom:1px solid #334155; margin-bottom:12px; color:#38bdf8; font-weight:800; text-transform:uppercase; font-size:14px; }
-        .res-card { background:rgba(30,41,59,0.6); border:1px solid #334155; border-radius:8px; padding:10px; margin-bottom:10px; }
-        .res-card-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
-        .res-title { color:#e2e8f0; font-size:13px; font-weight:700; }
-        .res-ok { color:#10b981; font-weight:bold; }
-        .res-warn { color:#fbbf24; font-weight:bold; }
-        .res-fail { color:#ef4444; font-weight:bold; }
-        .res-gems { color:#94a3b8; font-size:12px; }
-        .res-sug-box { margin-top:8px; padding-top:8px; border-top:1px dashed #475569; font-size:11px; line-height:1.5; color:#cbd5e1; }
-        .res-sug-title { color:#fbbf24; font-weight:bold; }
+        /* GÜVENLİ METİN SONUÇ KUTUSU */
+        #result-area { 
+            background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
+            font-family: 'Consolas', monospace; white-space: pre-wrap; 
+            min-height: 200px; max-height: 700px; overflow-y: auto; font-size: 14px; 
+            border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
+            line-height: 1.6;
+        }
 
         #debug-console { margin-top: 15px; background: #000; color: #ef4444; font-family: monospace; padding: 10px; border-radius: 8px; border: 1px solid #ef4444; font-size: 11px; display: none; }
         
         #joke-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         #joke-gif { max-width: 80%; max-height: 60vh; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #38bdf8; }
-        #joke-text { color: white; font-size: 28px; margin-top: 25px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
-        #joke-close { width: 200px; margin-top: 30px; padding: 12px; font-size: 14px; background: #ef4444; }
+        #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
+        #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
     </style>
 </head>
 <body>
@@ -168,7 +159,7 @@
 
         <div class="panel">
             <h2>Analiz Sonuçları</h2>
-            <div id="result-area" style="text-align:center; color:#94a3b8; font-style:italic;">Sonuçlar hesaplandığında burada görünecektir.</div>
+            <div id="result-area">Sonuçlar hesaplandığında burada görünecektir.</div>
         </div>
     </div>
 
@@ -184,7 +175,6 @@ import traceback
 
 def log_error(e):
     try:
-        window.console.error("PyScript Hatasi:", str(e), str(traceback.format_exc()))
         err_div = document.getElementById("debug-console")
         if err_div:
             err_div.style.display = "block"
@@ -268,7 +258,9 @@ def add_character(event=None):
             render_tabs()
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
-            if res_div: res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>'" + current_char + "' oluşturuldu.</div>"
+            if res_div: 
+                res_div.innerText = "--- '" + current_char + "' oluşturuldu ---"
+                res_div.style.color = "#10b981"
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
@@ -283,7 +275,9 @@ def delete_character(event=None):
             render_tabs()
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
-            if res_div: res_div.innerHTML = "<div style='color:#ef4444; text-align:center;'>Karakter silindi.</div>"
+            if res_div: 
+                res_div.innerText = "Karakter silindi.\n--- " + current_char + " Yüklendi ---"
+                res_div.style.color = "#ef4444"
     except Exception as e: log_error(e)
 
 def switch_tab_event(event):
@@ -331,7 +325,9 @@ def switch_tab(new_name):
         render_tabs()
         load_ui_for_char(current_char)
         res_div = document.getElementById("result-area")
-        if res_div: res_div.innerHTML = "<div style='color:#38bdf8; text-align:center;'>--- " + current_char + " Yüklendi ---</div>"
+        if res_div: 
+            res_div.innerText = "--- " + current_char + " Yüklendi ---"
+            res_div.style.color = "#38bdf8"
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
@@ -414,10 +410,17 @@ def get_valid_combos(cap, inventory, available_types, t1, t2, t3):
                     p = sum(GEM_STATS[g]["pts"] for g in combo_tuple)
                     all_combos.append({"pts": p, "will": w, "gems": list(combo_tuple), "counts": dict(counts)})
 
-        primary_combos = [c for c in all_combos if c['pts'] >= t1]
-        secondary_combos = [c for c in all_combos if t2 <= c['pts'] < t1]
-        tertiary_combos = [c for c in all_combos if t3 <= c['pts'] < t2]
-        fail_combos = [c for c in all_combos if t3 > c['pts']] # Güvenlik için ters çevrildi
+        primary_combos = []
+        secondary_combos = []
+        tertiary_combos = []
+        fail_combos = []
+        
+        for c in all_combos:
+            p = c['pts']
+            if p >= t1: primary_combos.append(c)
+            elif p >= t2: secondary_combos.append(c)
+            elif p >= t3: tertiary_combos.append(c)
+            else: fail_combos.append(c)
 
         primary_greedy = sorted(primary_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
         primary_humble = sorted(primary_combos, key=lambda x: (x["pts"], len(x["gems"])))  
@@ -460,7 +463,8 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerHTML = "<div style='text-align:center; color: #fbbf24;'>Hesaplanıyor... Lütfen bekleyin.</div>"
+        res_div.innerText = "Hesaplanıyor... Lütfen bekleyin."
+        res_div.style.color = "#fbbf24"
         
         inventory = {}
         for code in GEM_STATS:
@@ -486,7 +490,8 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerHTML = "<div style='color: #ef4444; text-align:center;'>Envanter boş. Lütfen taş ekleyin.</div>"
+            res_div.innerText = "Envanter boş. Lütfen taş ekleyin."
+            res_div.style.color = "#ef4444"
             return
 
         pools = []
@@ -575,8 +580,10 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        # TAMAMEN GÜVENLİ VE ŞIK KART TASARIMI MANTIGI
-        output = "<div class='res-header'>=== " + current_char + " SONUÇLARI ===<br><span style='color:#10b981'>TOPLAM PUAN: " + str(best_score) + "</span></div>"
+        # TAMAMEN GÜVENLİ PLAIN TEXT ÇIKTISI (HTML PARSER ÇÖKMESİNİ ENGELLER)
+        output = "=== " + current_char + " SONUÇLARI ===\n"
+        output += "TOPLAM PUAN: " + str(best_score) + "\n"
+        output += "-" * 35 + "\n"
         
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
@@ -595,20 +602,18 @@ def calculate_click(event):
             pts = res["pts"]
             
             if pts >= p_target:
-                status = "<span class='res-ok'>✅ BAŞARILI</span>"
+                status = "✅ BAŞARILI"
             elif pts >= s_target:
-                status = "<span class='res-warn'>⚠️ (Ara Hedef " + str(s_target) + "P)</span>"
+                status = "⚠️ (Ara Hedef " + str(s_target) + "P)"
             elif pts >= t_target:
-                status = "<span class='res-warn'>⚠️ (Ara Hedef " + str(t_target) + "P)</span>"
+                status = "⚠️ (Ara Hedef " + str(t_target) + "P)"
             else:
-                status = "<span class='res-fail'>❌ BAŞARISIZ</span>"
+                status = "❌ BAŞARISIZ"
             
-            output += "<div class='res-card'>"
-            output += "<div class='res-card-top'><span class='res-title'>" + core_names[i] + " (" + str(cap) + "W)</span>"
-            output += "<span>" + str(pts) + "/" + str(p_target) + " " + status + "</span></div>"
+            output += "\n" + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
             
             gem_str = " + ".join(res['gems']) if res['gems'] else "BOŞ"
-            output += "<div class='res-gems'>Takılacaklar: <span style='color:#f8fafc'>" + gem_str + "</span></div>"
+            output += "Takılacaklar: " + gem_str + "\n"
             
             if p_target > pts:
                 sugs = []
@@ -642,14 +647,14 @@ def calculate_click(event):
                     sugs.sort(key=lambda x: (x["cost"], x["will_diff"], x["pts_diff"]))
                     s = sugs[0]
                     miss_str = ", ".join(s['miss']) if s['miss'] else "Envanterde var"
-                    output += "<div class='res-sug-box'>"
-                    output += "<span class='res-sug-title'>🎯 ÖNERİ:</span> Bul: <strong>" + miss_str + "</strong><br>"
-                    output += "Eğer bulursan yeni dizilim: <span style='color:white; font-weight:bold'>" + "+".join(s['combo']) + " (" + str(s['will']) + "W)</span>"
-                    output += "</div>"
+                    output += "\n[ 🎯 HEDEF ÖNERİSİ ]\n"
+                    output += "Bulunması Gereken: " + miss_str + "\n"
+                    output += "Yeni Dizilim: " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
                     
-            output += "</div>"
+            output += "-" * 35 + "\n"
         
-        res_div.innerHTML = output
+        res_div.innerText = output
+        res_div.style.color = "#e2e8f0" # Rengi normale çevir
 
     except Exception as e: log_error(e)
                             
@@ -659,7 +664,9 @@ def reset_click(event):
             el = document.getElementById("gem_" + code)
             if el: el.value = "0"
         res_div = document.getElementById("result-area")
-        if res_div: res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>Sayılar Sıfırlandı.</div>"
+        if res_div: 
+            res_div.innerText = "Sayılar Sıfırlandı."
+            res_div.style.color = "#10b981"
         save_data()
     except Exception as e: log_error(e)
 
@@ -697,21 +704,45 @@ try:
         w_keys = list(w_groups.keys())
         w_keys.sort()
         
-        html_str = ""
         for w in w_keys:
-            html_str += "<div class='w-row'>"
-            html_str += "<div class='w-label'>" + str(w) + " WILLPOWER</div>"
+            row_div = document.createElement("div")
+            row_div.className = "w-row"
+            
+            lbl_div = document.createElement("div")
+            lbl_div.className = "w-label"
+            lbl_div.innerText = str(w) + " WILLPOWER" 
+            row_div.appendChild(lbl_div)
+            
             for code, stats in w_groups[w]:
                 color = stats['color']
                 pts = stats['pts']
-                html_str += "<div class='gem-box'>"
-                html_str += "<div class='gem-icon' style='background-color: " + color + "' id='icon_" + code + "' title='Tıkla ve 1 Ekle'>" + code + "</div>"
-                html_str += "<div class='gem-pts'>" + str(pts) + "P</div>"
-                html_str += "<input type='number' id='gem_" + code + "' min='0' value='0'>"
-                html_str += "</div>"
-            html_str += "</div>"
-            
-        gem_container.innerHTML = html_str
+                
+                box_div = document.createElement("div")
+                box_div.className = "gem-box"
+                
+                icon_div = document.createElement("div")
+                icon_div.className = "gem-icon"
+                icon_div.style.backgroundColor = color
+                icon_div.id = "icon_" + code
+                icon_div.title = "Tıkla ve 1 Ekle"
+                icon_div.innerText = code
+                box_div.appendChild(icon_div)
+                
+                pts_div = document.createElement("div")
+                pts_div.className = "gem-pts"
+                pts_div.innerText = str(pts) + "P"
+                box_div.appendChild(pts_div)
+                
+                inp = document.createElement("input")
+                inp.type = "number"
+                inp.id = "gem_" + code
+                inp.min = "0"
+                inp.value = "0"
+                box_div.appendChild(inp)
+                
+                row_div.appendChild(box_div)
+                
+            gem_container.appendChild(row_div)
 
     for code in GEM_STATS.keys():
         icon_el = document.getElementById("icon_" + code)

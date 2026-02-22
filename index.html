@@ -6,14 +6,12 @@
     <title>Lost Ark Astrogem Calculator</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://pyscript.net/releases/2023.05.1/pyscript.css" />
     <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
 
     <style>
-        /* GENEL AYARLAR */
         body { 
-            background-color: #0f172a; /* Çok koyu lacivert/gri */
+            background-color: #0f172a; 
             color: #f8fafc; 
             font-family: 'Inter', sans-serif; 
             margin: 0; 
@@ -22,186 +20,110 @@
             background-attachment: fixed;
         }
         
-        /* BAŞLIK */
         h1 { 
-            text-align: center; 
-            font-size: 2.8rem;
-            font-weight: 800;
-            margin-top: 10px;
-            margin-bottom: 5px; 
+            text-align: center; font-size: 2.8rem; font-weight: 800; margin-top: 10px; margin-bottom: 5px; 
             background: linear-gradient(to right, #38bdf8, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
         }
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 14px; margin-bottom: 25px; letter-spacing: 0.5px;}
         
-        /* ANA DÜZEN (LAYOUT) */
         .container { 
-            max-width: 1400px; 
-            margin: 0 auto; 
-            display: grid; 
-            grid-template-columns: 320px 320px 1fr; 
-            gap: 25px; 
-            align-items: start;
+            max-width: 1400px; margin: 0 auto; display: grid; 
+            grid-template-columns: 320px 320px 1fr; gap: 25px; align-items: start;
         }
 
-        @media (max-width: 1100px) {
-            .container { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 1100px) { .container { grid-template-columns: 1fr; } }
 
-        /* PANELLER */
         .panel { 
-            background-color: #1e293b; 
-            padding: 25px; 
-            border-radius: 16px; 
-            border: 1px solid #334155; 
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
+            background-color: #1e293b; padding: 25px; border-radius: 16px; border: 1px solid #334155; 
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2); position: relative; overflow: hidden;
         }
         
         .panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
             background: linear-gradient(to right, #334155, #475569);
         }
 
-        .panel:nth-child(1)::before { background: linear-gradient(to right, #f59e0b, #ef4444); } /* Core Ayarları */
-        .panel:nth-child(2)::before { background: linear-gradient(to right, #3b82f6, #8b5cf6); } /* Envanter */
-        .panel:nth-child(3)::before { background: linear-gradient(to right, #10b981, #3b82f6); } /* Sonuçlar */
+        .panel:nth-child(1)::before { background: linear-gradient(to right, #f59e0b, #ef4444); } 
+        .panel:nth-child(2)::before { background: linear-gradient(to right, #3b82f6, #8b5cf6); } 
+        .panel:nth-child(3)::before { background: linear-gradient(to right, #10b981, #3b82f6); } 
         
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 20px;}
         
-        /* ENVANTER STİLLERİ */
-        .gem-row { 
-            display: flex; 
-            align-items: center; 
-            margin-bottom: 12px; 
-            justify-content: space-between; 
-            background-color: #0f172a;
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid #1e293b;
-            transition: all 0.2s ease;
+        /* YENİ ENVANTER TASARIMI */
+        .w-row {
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;
+            background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #1e293b;
         }
-        .gem-row:hover { border-color: #475569; transform: translateX(2px); }
+        .w-label {
+            width: 100%; font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px;
+        }
+        .gem-box {
+            display: flex; flex-direction: column; align-items: center; background: #0f172a;
+            padding: 10px 6px; border-radius: 10px; border: 1px solid #334155;
+            width: calc(25% - 6px); /* 4 Sütun */ box-sizing: border-box; transition: all 0.2s ease;
+        }
+        .gem-box:hover { border-color: #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
         .gem-icon { 
-            width: 32px; height: 32px; 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-weight: 800; margin-right: 12px; color: white; 
-            font-size: 14px;
-            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2);
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            font-weight: 800; color: white; font-size: 14px; margin: 0 0 6px 0; cursor: pointer;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            transition: transform 0.1s;
         }
+        .gem-icon:active { transform: scale(0.9) translateY(2px); }
+        .gem-pts { font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-weight: 700; }
+        .gem-box input[type="number"] { width: 100%; padding: 6px 0; font-size: 14px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; }
         
-        /* INPUT VE SELECTS */
         input[type="number"], select { 
-            background-color: #0f172a; 
-            color: #f8fafc; 
-            border: 1px solid #334155; 
-            border-radius: 8px; 
-            padding: 10px; 
-            font-family: 'Inter', sans-serif;
-            font-weight: 600; 
-            font-size: 14px; 
-            transition: all 0.2s ease;
+            background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; border-radius: 8px; 
+            padding: 10px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; transition: all 0.2s ease;
         }
-        input[type="number"] { width: 65px; text-align: center; }
         select { width: 100%; margin-bottom: 15px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
-        
-        input[type="number"]:focus, select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-        }
-
+        input[type="number"]:focus, select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
         label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
         
-        /* BUTONLAR */
         button { 
             width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; 
             font-weight: 700; cursor: pointer; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
             font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
         }
-        
-        .btn-calc { 
-            background: linear-gradient(135deg, #10b981, #059669); color: white; 
-            font-size: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); 
-            margin-top: 20px;
-        } 
+        .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 20px;} 
         .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #34d399, #10b981); }
-        
         .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } 
         .btn-reset:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3); }
-        
         .btn-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; } 
         .btn-delete:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
-        
-        .btn-hard-reset { 
-            background-color: transparent; color: #64748b; border: 1px dashed #475569; 
-            margin-top: 30px; font-size: 12px; padding: 12px; box-shadow: none;
-        } 
+        .btn-hard-reset { background-color: transparent; color: #64748b; border: 1px dashed #475569; margin-top: 30px; font-size: 12px; padding: 12px; box-shadow: none; } 
         .btn-hard-reset:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); }
         
-        /* SONUÇ ALANI */
         #result-area { 
-            background-color: #0f172a; 
-            color: #e2e8f0; 
-            padding: 20px; 
-            border-radius: 10px; 
-            font-family: 'Consolas', 'Courier New', monospace; 
-            white-space: pre-wrap; 
-            min-height: 200px; max-height: 650px; overflow-y: auto; 
-            font-size: 14px; line-height: 1.5;
-            border: 1px solid #334155; 
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+            background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
+            font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; 
+            min-height: 200px; max-height: 650px; overflow-y: auto; font-size: 14px; line-height: 1.5;
+            border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
         }
         
-        /* CUSTOM SCROLLBAR */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
-        /* SEKMELER (TABS) */
-        .tabs { 
-            display: flex; margin-bottom: 30px; background-color: transparent; 
-            padding: 0; border-radius: 0; overflow-x: auto; gap: 10px; align-items: center; 
-            justify-content: center;
-        }
-        .tab-btn { 
-            background-color: #1e293b; color: #94a3b8; padding: 10px 20px; 
-            border: 1px solid #334155; border-radius: 30px; font-weight: 600; 
-            font-size: 13px; width: auto; margin: 0; text-transform: none; letter-spacing: normal;
-        }
+        .tabs { display: flex; margin-bottom: 30px; background-color: transparent; padding: 0; border-radius: 0; overflow-x: auto; gap: 10px; align-items: center; justify-content: center; }
+        .tab-btn { background-color: #1e293b; color: #94a3b8; padding: 10px 20px; border: 1px solid #334155; border-radius: 30px; font-weight: 600; font-size: 13px; width: auto; margin: 0; text-transform: none; letter-spacing: normal; }
         .tab-btn:hover { background-color: #334155; color: white; }
-        .tab-btn.active { 
-            background: linear-gradient(135deg, #38bdf8, #3b82f6); 
-            color: white; border: none; 
-            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); 
-        }
-        .add-tab-btn { 
-            background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px dashed #10b981;
-        }
+        .tab-btn.active { background: linear-gradient(135deg, #38bdf8, #3b82f6); color: white; border: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
+        .add-tab-btn { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px dashed #10b981; }
         .add-tab-btn:hover { background: #10b981; color: white; }
         
         #debug-console { margin-top: 20px; background: #000; color: #ef4444; font-family: monospace; padding: 15px; border-radius: 8px; border: 1px solid #ef4444; min-height: 50px; display: none; }
         
-        /* ŞAKA (GIF) EKRANI STİLLERİ */
         #joke-overlay {
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95); 
-            backdrop-filter: blur(5px);
-            z-index: 9999; 
-            justify-content: center;
-            align-items: center; 
-            flex-direction: column;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px);
+            z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
         }
         #joke-gif { max-width: 80%; max-height: 60vh; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #38bdf8; }
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
@@ -291,32 +213,23 @@ def log_error(e):
     err_div.style.display = "block"
     err_div.innerHTML = f"HATA:<br>{str(e)}<br>{traceback.format_exc()}"
 
-
 GEM_STATS = {
-    # 3 Willpower Grubunun Taşları (Kırmızı/Sarı Tonları)
     "S": {"will": 3, "pts": 5, "color": "#ef4444"},
     "A": {"will": 3, "pts": 4, "color": "#f97316"},
     "B": {"will": 3, "pts": 3, "color": "#f59e0b"},
     "C": {"will": 3, "pts": 2, "color": "#b45309"}, 
-
-    # 4 Willpower Grubunun Taşları (Yeşil Tonları)
     "D": {"will": 4, "pts": 5, "color": "#10b981"},
     "E": {"will": 4, "pts": 4, "color": "#059669"},
     "F": {"will": 4, "pts": 3, "color": "#047857"},
     "G": {"will": 4, "pts": 2, "color": "#064e3b"}, 
-
-    # 5 Willpower Grubunun Taşları (Mavi/Mor Tonları)
     "H": {"will": 5, "pts": 5, "color": "#3b82f6"},
     "I": {"will": 5, "pts": 4, "color": "#2563eb"},
     "J": {"will": 5, "pts": 3, "color": "#8b5cf6"},
     "K": {"will": 5, "pts": 2, "color": "#6d28d9"}, 
-
-    # 6 Willpower Grubunun Taşları (Gri Tonları)
     "L": {"will": 6, "pts": 5, "color": "#cbd5e1"},
     "M": {"will": 6, "pts": 4, "color": "#94a3b8"}, 
     "N": {"will": 6, "pts": 3, "color": "#64748b"}, 
     "O": {"will": 6, "pts": 2, "color": "#475569"}, 
-
     "P": {"will": 7, "pts": 5, "color": "#334155"}, 
     "R": {"will": 7, "pts": 4, "color": "#1e293b"}, 
 } 
@@ -328,7 +241,9 @@ TERTIARY_SCORES = {12: 10, 15: 10, 17: 10}
 current_char = ""
 app_data = {}
 
-# --- ŞAKA (GIF) TETİKLEME FONKSİYONU ---
+# GC Hatalarını önlemek için Proxyleri burada tutuyoruz
+ui_proxies = []
+
 def check_for_joke(name):
     overlay = document.getElementById("joke-overlay")
     gif = document.getElementById("joke-gif")
@@ -361,7 +276,6 @@ def check_for_joke(name):
         gif.src = "backattack.gif"
         overlay.style.display = "flex"
 
-# --- DİNAMİK SEKME FONKSİYONLARI ---
 def add_character(event=None):
     try:
         new_name = window.prompt("Yeni karakterin adını girin:")
@@ -372,7 +286,6 @@ def add_character(event=None):
                 return
 
             check_for_joke(new_name)
-                
             app_data[new_name] = {"inventory": {}, "cores": [0,0,0]}
             global current_char
             current_char = new_name
@@ -396,7 +309,16 @@ def delete_character(event=None):
             document.getElementById("result-area").innerHTML = f"Karakter silindi.\n--- {current_char} Yüklendi ---"
     except Exception as e: log_error(e)
 
+def switch_tab_event(event):
+    name = event.currentTarget.getAttribute("data-name")
+    switch_tab(name)
+
+def rename_tab_event(event):
+    name = event.currentTarget.getAttribute("data-name")
+    rename_tab(name)
+
 def render_tabs():
+    global ui_proxies
     container = document.getElementById("tab-container")
     container.innerHTML = ""
     for name in app_data.keys():
@@ -404,17 +326,22 @@ def render_tabs():
         btn.innerText = name
         btn.className = "tab-btn"
         if name == current_char: btn.classList.add("active")
-        click_proxy = create_proxy(lambda e, n=name: switch_tab(n))
-        dbl_click_proxy = create_proxy(lambda e, n=name: rename_tab(n))
-        btn.addEventListener("click", click_proxy)
-        btn.addEventListener("dblclick", dbl_click_proxy)
+        btn.setAttribute("data-name", name)
+        
+        c_proxy = create_proxy(switch_tab_event)
+        d_proxy = create_proxy(rename_tab_event)
+        ui_proxies.extend([c_proxy, d_proxy])
+        
+        btn.addEventListener("click", c_proxy)
+        btn.addEventListener("dblclick", d_proxy)
         container.appendChild(btn)
         
     add_btn = document.createElement("button")
     add_btn.innerText = "➕ Ekle"
     add_btn.className = "tab-btn add-tab-btn"
-    add_btn_proxy = create_proxy(add_character)
-    add_btn.addEventListener("click", add_btn_proxy)
+    a_proxy = create_proxy(add_character)
+    ui_proxies.append(a_proxy)
+    add_btn.addEventListener("click", a_proxy)
     container.appendChild(add_btn)
 
 def switch_tab(new_name):
@@ -440,7 +367,6 @@ def rename_tab(old_name):
             render_tabs()
     except Exception as e: log_error(e)
 
-# --- VERİ VE YÜKLEME ---
 def load_ui_for_char(name):
     data = app_data.get(name, {"inventory": {}, "cores": [0,0,0]})
     inv = data.get("inventory", {})
@@ -485,12 +411,10 @@ def load_data():
 
 def get_valid_combos(cap, inventory, available_types, t1, t2, t3):
     all_combos = [{"pts": 0, "will": 0, "gems": [], "counts": {}}]
-    
     for r in range(1, 5):
         for combo_tuple in combinations_with_replacement(available_types, r):
             w = sum(GEM_STATS[g]["will"] for g in combo_tuple)
             if w > cap: continue
-            
             counts = Counter(combo_tuple)
             if all(inventory.get(g, 0) >= c for g, c in counts.items()):
                 p = sum(GEM_STATS[g]["pts"] for g in combo_tuple)
@@ -503,13 +427,10 @@ def get_valid_combos(cap, inventory, available_types, t1, t2, t3):
 
     primary_greedy = sorted(primary_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
     primary_humble = sorted(primary_combos, key=lambda x: (x["pts"], len(x["gems"])))  
-    
     secondary_greedy = sorted(secondary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
     secondary_cheap = sorted(secondary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
-    
     tertiary_greedy = sorted(tertiary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
     tertiary_cheap = sorted(tertiary_combos, key=lambda x: (len(x["gems"]), x["pts"])) 
-    
     fail_greedy = sorted(fail_combos, key=lambda x: (-x["pts"], len(x["gems"])))
     fail_cheap = sorted(fail_combos, key=lambda x: (len(x["gems"]), x["pts"]))
 
@@ -620,19 +541,16 @@ def calculate_click(event):
                     
                     current_max_single = max(c1["pts"], c2["pts"], c3["pts"])
 
-                    # YENİ: ASIL HEDEF (PRIMARY) SAYACI (MUTLAK 1. ÖNCELİK)
                     primary_success_count = 0
                     if c1["pts"] >= primaries[0]: primary_success_count += 1
                     if c2["pts"] >= primaries[1]: primary_success_count += 1
                     if c3["pts"] >= primaries[2]: primary_success_count += 1
 
-                    # ÖZEL ÖNCELİK KURALLARI
                     sun_moon_14 = 1 if (c1["pts"] >= 14 and c2["pts"] >= 14) else 0
                     sun_17 = 1 if c1["pts"] >= 17 else 0
                     moon_17 = 1 if c2["pts"] >= 17 else 0
                     star_17 = 1 if c3["pts"] >= 17 else 0
                     
-                    # Karşılaştırma Paketi (TUPLE)
                     current_eval = (primary_success_count, tier_score, sun_moon_14, sun_17, moon_17, star_17, current_score, current_max_single)
 
                     if current_eval > best_eval:
@@ -653,7 +571,7 @@ def calculate_click(event):
                 best_assign.append(best)
                 best_score += best["pts"]
         else:
-            best_score = best_eval[6] # Tuple güncellendiği için index kaydı
+            best_score = best_eval[6]
 
         output = f"=== {current_char} SONUÇLARI ===\n"
         output += f"TOPLAM PUAN: {best_score}\n"
@@ -751,21 +669,51 @@ def hard_reset_click(event):
         localStorage.removeItem("astrogem_data")
         window.location.reload()
 
-# BAŞLANGIÇ
+# YENİ ENVANTER GRUPLAMA VE OLAY DİNLEYİCİLERİ
 try:
     gem_container = document.getElementById("gem-inputs")
-    gem_container.innerHTML = ""
+    
+    # Taşları Willpower'a göre grupla
+    w_groups = {}
     for code, stats in GEM_STATS.items():
-        div = document.createElement("div")
-        div.className = "gem-row"
-        div.innerHTML = f'''
-            <div style="display:flex; align-items:center;">
-                <div class="gem-icon" style="background-color: {stats['color']}\">{code}</div>
-                <span>{stats['will']}W / {stats['pts']}P</span>
+        w = stats['will']
+        if w not in w_groups: w_groups[w] = []
+        w_groups[w].append((code, stats))
+        
+    html_str = ""
+    for w in sorted(w_groups.keys()):
+        html_str += f"<div class='w-row'><div class='w-label'>{w} WİLLPOWER CORE GEMLERİ</div>"
+        for code, stats in w_groups[w]:
+            html_str += f'''
+            <div class="gem-box">
+                <div class="gem-icon" style="background-color: {stats['color']}" id="icon_{code}" title="Tıkla ve 1 Ekle">{code}</div>
+                <div class="gem-pts">{stats['pts']}P</div>
+                <input type="number" id="gem_{code}" min="0" value="0">
             </div>
-            <input type=\"number\" id=\"gem_{code}\" min=\"0\" value=\"0\">
-        '''
-        gem_container.appendChild(div)
+            '''
+        html_str += "</div>"
+        
+    gem_container.innerHTML = html_str
+
+    # Taşa tıklandığında sayıyı artırma
+    def increment_gem(event):
+        code = event.currentTarget.id.split("_")[1]
+        el = document.getElementById(f"gem_{code}")
+        val = el.value
+        el.value = int(val) + 1 if val else 1
+        save_data()
+
+    # Olayları (Events) bağlama
+    for code in GEM_STATS.keys():
+        icon_el = document.getElementById(f"icon_{code}")
+        i_proxy = create_proxy(increment_gem)
+        ui_proxies.append(i_proxy)
+        icon_el.addEventListener("click", i_proxy)
+        
+        input_el = document.getElementById(f"gem_{code}")
+        change_proxy = create_proxy(lambda e: save_data())
+        ui_proxies.append(change_proxy)
+        input_el.addEventListener("change", change_proxy)
 
     load_data()
     calc_proxy = create_proxy(calculate_click)

@@ -203,6 +203,8 @@ GEM_STATS = {
 } 
 
 TARGET_SCORES = {12: 14, 15: 17, 17: 17}
+SECONDARY_SCORES = {12: 10, 15: 14, 17: 14}
+TERTIARY_SCORES = {12: 10, 15: 10, 17: 10}
 
 current_char = ""
 app_data = {}
@@ -362,8 +364,7 @@ def load_data():
         load_ui_for_char(current_char)
     except Exception as e: log_error(e)
 
-def get_valid_combos(cap, inventory, available_types, target_score):
-    # KRİTİK: Havuza her zaman "Boş/0 Puanlık" bir seçenek ekliyoruz ki diğer core'lar tıkanmasın
+def get_valid_combos(cap, inventory, available_types, t1, t2, t3):
     all_combos = [{"pts": 0, "will": 0, "gems": [], "counts": {}}]
     
     for r in range(1, 5):
@@ -374,17 +375,20 @@ def get_valid_combos(cap, inventory, available_types, target_score):
             counts = Counter(combo_tuple)
             if all(inventory.get(g, 0) >= c for g, c in counts.items()):
                 p = sum(GEM_STATS[g]["pts"] for g in combo_tuple)
-                # Hızlandırmak için count'ları da kaydediyoruz
                 all_combos.append({"pts": p, "will": w, "gems": list(combo_tuple), "counts": dict(counts)})
 
-    success_combos = [c for c in all_combos if c['pts'] >= target_score]
-    fail_combos = [c for c in all_combos if c['pts'] < target_score]
+    # Kombinasyonları 3 Aşamaya Ayırıyoruz
+    primary_combos = [c for c in all_combos if c['pts'] >= t1]
+    secondary_combos = [c for c in all_combos if t2 <= c['pts'] < t1]
+    tertiary_combos = [c for c in all_combos if t3 <= c['pts'] < t2]
+    fail_combos = [c for c in all_combos if c['pts'] < t3]
 
-    greedy_list = sorted(success_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
-    humble_list = sorted(success_combos, key=lambda x: (x["pts"], len(x["gems"])))  
-    fail_list = sorted(fail_combos, key=lambda x: (-x["pts"], len(x["gems"])))
-    # YENİ: En az taş harcayan başarısız kombinasyonları da alıyoruz
-    cheap_list = sorted(fail_combos, key=lambda x: (len(x["gems"]), x["pts"]))
+    primary_greedy = sorted(primary_combos, key=lambda x: (-x["pts"], len(x["gems"]))) 
+    primary_humble = sorted(primary_combos, key=lambda x: (x["pts"], len(x["gems"])))  
+    secondary_greedy = sorted(secondary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+    tertiary_greedy = sorted(tertiary_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+    fail_greedy = sorted(fail_combos, key=lambda x: (-x["pts"], len(x["gems"])))
+    fail_cheap = sorted(fail_combos, key=lambda x: (len(x["gems"]), x["pts"]))
 
     final_pool = []
     seen = set()
@@ -399,13 +403,15 @@ def get_valid_combos(cap, inventory, available_types, target_score):
                 seen.add(t)
                 added += 1
     
-    add_to_pool(humble_list, 50) 
-    add_to_pool(greedy_list, 40) 
-    add_to_pool(fail_list, 40)
-    add_to_pool(cheap_list, 20) # 0, 1 veya 2 taşlı ucuz yöntemler
+    add_to_pool(primary_humble, 40) 
+    add_to_pool(primary_greedy, 40) 
+    add_to_pool(secondary_greedy, 30) 
+    add_to_pool(tertiary_greedy, 30) # 10 Puanlık ihtimaller
+    add_to_pool(fail_greedy, 15)
+    add_to_pool(fail_cheap, 15)
     
     return final_pool
-
+        
 def calculate_click(event):
     try:
         save_data()
@@ -420,11 +426,15 @@ def calculate_click(event):
             except: pass
         
         core_caps = []
-        targets = []
+        primaries = []
+        secondaries = []
+        tertiaries = []
         for i in range(1, 4):
             val = int(document.getElementById(f"core{i}").value)
             core_caps.append(val)
-            targets.append(TARGET_SCORES[val])
+            primaries.append(TARGET_SCORES[val])
+            secondaries.append(SECONDARY_SCORES[val])
+            tertiaries.append(TERTIARY_SCORES[val])
         
         available_types = list(inventory.keys())
         if not available_types:
@@ -433,16 +443,15 @@ def calculate_click(event):
 
         pools = []
         for i in range(3):
-            candidates = get_valid_combos(core_caps[i], inventory, available_types, targets[i])
+            candidates = get_valid_combos(core_caps[i], inventory, available_types, primaries[i], secondaries[i], tertiaries[i])
             pools.append(candidates)
 
         best_score = -1
-        best_success_count = -1
+        best_tier_score = -1
         best_max_single = -1
         best_assign = []
         found = False
 
-# OPTİMİZASYON DÖNGÜSÜ (IŞIK HIZINDA BUDAMA)
         for c1 in pools[0]:
             inv1 = inventory.copy()
             valid1 = True
@@ -451,7 +460,7 @@ def calculate_click(event):
                 if inv1[k] < 0:
                     valid1 = False
                     break
-            if not valid1: continue # Core 1'in taşı yetmiyorsa aşağılara hiç bakma (Büyük hız)
+            if not valid1: continue 
 
             for c2 in pools[1]:
                 inv2 = inv1.copy()
@@ -471,23 +480,31 @@ def calculate_click(event):
                             break
                     if not valid3: continue
                     
-                    # Eğer buraya kadar indiyse envanter 3 Core'a da yetiyor demektir!
                     current_score = c1["pts"] + c2["pts"] + c3["pts"]
                     
-                    success_count = 0
-                    if c1["pts"] >= targets[0]: success_count += 1
-                    if c2["pts"] >= targets[1]: success_count += 1
-                    if c3["pts"] >= targets[2]: success_count += 1
+                    # YENİ: 3 AŞAMALI (TIER) PUANLAMASI
+                    tier_score = 0
+                    if c1["pts"] >= primaries[0]: tier_score += 3
+                    elif c1["pts"] >= secondaries[0]: tier_score += 2
+                    elif c1["pts"] >= tertiaries[0]: tier_score += 1
+                    
+                    if c2["pts"] >= primaries[1]: tier_score += 3
+                    elif c2["pts"] >= secondaries[1]: tier_score += 2
+                    elif c2["pts"] >= tertiaries[1]: tier_score += 1
+                    
+                    if c3["pts"] >= primaries[2]: tier_score += 3
+                    elif c3["pts"] >= secondaries[2]: tier_score += 2
+                    elif c3["pts"] >= tertiaries[2]: tier_score += 1
                     
                     current_max_single = max(c1["pts"], c2["pts"], c3["pts"])
 
-                    if success_count > best_success_count:
-                        best_success_count = success_count
+                    if tier_score > best_tier_score:
+                        best_tier_score = tier_score
                         best_score = current_score
                         best_max_single = current_max_single
                         best_assign = [c1, c2, c3]
                         found = True
-                    elif success_count == best_success_count:
+                    elif tier_score == best_tier_score:
                         if current_score > best_score:
                             best_score = current_score
                             best_max_single = current_max_single
@@ -498,12 +515,13 @@ def calculate_click(event):
                                 best_max_single = current_max_single
                                 best_assign = [c1, c2, c3]
                                 found = True
+        
         if not found:
             best_score = 0
             best_assign = []
             curr_inv = inventory.copy()
             for i in range(3):
-                cands = get_valid_combos(core_caps[i], curr_inv, list(curr_inv.keys()), targets[i])
+                cands = get_valid_combos(core_caps[i], curr_inv, list(curr_inv.keys()), primaries[i], secondaries[i], tertiaries[i])
                 best = cands[0] if cands else {"pts":0, "gems":[]}
                 if best["gems"]:
                     for g in best["gems"]: 
@@ -518,22 +536,33 @@ def calculate_click(event):
         
         for i, res in enumerate(best_assign):
             cap = core_caps[i]
-            target = targets[i]
+            p_target = primaries[i]
+            s_target = secondaries[i]
+            t_target = tertiaries[i]
             pts = res["pts"]
-            status = "✅" if pts >= target else "❌"
             
-            output += f"\nCore {i+1} ({cap}W): {pts}/{target} {status}\n"
+            # GÖRSEL GERİ BİLDİRİM: Hangi hedef tutturulduğunu yazacak
+            if pts >= p_target:
+                status = "✅"
+            elif pts >= s_target:
+                status = f"⚠️ (Ara Hedef {s_target}P)"
+            elif pts >= t_target:
+                status = f"⚠️ (Ara Hedef {t_target}P)"
+            else:
+                status = "❌"
+            
+            output += f"\nCore {i+1} ({cap}W): {pts}/{p_target} {status}\n"
             gem_str = "+".join(res['gems']) if res['gems'] else 'BOŞ'
             output += f"Tak: {gem_str}\n"
             
-            if pts < target:
+            if pts < p_target:
                 output += "[ÖNERİLER]\n"
                 sugs = []
                 for r in range(1, 5):
                     for combo in combinations_with_replacement(all_gems, r):
                         w = sum(GEM_STATS[g]["will"] for g in combo)
                         p = sum(GEM_STATS[g]["pts"] for g in combo)
-                        if w <= cap and p >= target:
+                        if w <= cap and p >= p_target:
                             need = Counter(combo)
                             have = Counter(res["gems"])
                             missing = list((need - have).elements())
@@ -606,6 +635,7 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+
 
 
 

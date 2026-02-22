@@ -42,6 +42,12 @@
         
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 15px;}
         
+        /* YENİ: ENVANTER SEKMELERİ (ORDER / CHAOS) */
+        .inv-tabs { display: flex; gap: 6px; margin-bottom: 12px; background: rgba(15, 23, 42, 0.6); padding: 6px; border-radius: 8px; border: 1px solid #334155; }
+        .inv-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-weight: 800; font-size: 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin: 0; letter-spacing: 1px;}
+        .inv-tab-btn.active { background: linear-gradient(135deg, #38bdf8, #818cf8); color: white; box-shadow: 0 4px 10px rgba(56, 189, 248, 0.2); }
+        .inv-tab-btn:hover:not(.active) { background: #334155; color: white; }
+
         #gem-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .w-row { display: flex; flex-wrap: wrap; gap: 6px; background: rgba(15, 23, 42, 0.4); padding: 10px 8px; border-radius: 10px; border: 1px solid #1e293b; align-content: flex-start;}
         .w-label { width: 100%; font-size: 12px; font-weight: 800; color: #94a3b8; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px; text-align: center;}
@@ -80,7 +86,6 @@
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
-        /* GÜVENLİ METİN SONUÇ KUTUSU */
         #result-area { 
             background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
             font-family: 'Consolas', monospace; white-space: pre-wrap; 
@@ -153,7 +158,13 @@
         </div>
 
         <div class="panel">
-            <h2>Envanter</h2>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:8px;">
+                <h2 style="margin:0; border:none; padding:0;">Envanter</h2>
+            </div>
+            <div class="inv-tabs">
+                <button id="btn-inv-order" class="inv-tab-btn active">ORDER</button>
+                <button id="btn-inv-chaos" class="inv-tab-btn">CHAOS</button>
+            </div>
             <div id="gem-inputs"></div>
         </div>
 
@@ -207,6 +218,7 @@ SECONDARY_SCORES = {12: 10, 15: 14, 17: 14}
 TERTIARY_SCORES = {12: 10, 15: 10, 17: 10}
 
 current_char = ""
+current_inv_tab = "order" # Aktif envanter sekmesi
 app_data = {}
 ui_proxies = []
 
@@ -251,7 +263,8 @@ def add_character(event=None):
                 window.alert("Bu isimde bir karakter zaten var!")
                 return
             check_for_joke(new_name)
-            app_data[new_name] = {"inventory": {}, "cores": [0,0,0]}
+            # İki envanter de oluşturuluyor
+            app_data[new_name] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
             global current_char
             current_char = new_name
             save_data()
@@ -269,7 +282,7 @@ def delete_character(event=None):
         if window.confirm("'" + current_char + "' isimli karakteri silmek istediğinize emin misiniz?"):
             del app_data[current_char]
             if not app_data:
-                app_data["Karakter 1"] = {"inventory": {}, "cores": [0,0,0]}
+                app_data["Karakter 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
             current_char = list(app_data.keys())[0]
             save_data()
             render_tabs()
@@ -343,11 +356,45 @@ def rename_tab(old_name):
             render_tabs()
     except Exception as e: log_error(e)
 
+# --- YENİ ENVANTER DEĞİŞTİRME FONKSİYONU ---
+def switch_inv_tab(tab):
+    global current_inv_tab
+    try:
+        save_data() # Geçiş yapmadan önce mevcut sayıları kaydet
+        current_inv_tab = tab
+        
+        btn_o = document.getElementById("btn-inv-order")
+        btn_c = document.getElementById("btn-inv-chaos")
+        if btn_o and btn_c:
+            if tab == "order":
+                btn_o.classList.add("active")
+                btn_c.classList.remove("active")
+            else:
+                btn_c.classList.add("active")
+                btn_o.classList.remove("active")
+                
+        load_ui_for_char(current_char) # Ekranı yeni sekmeye göre doldur
+    except Exception as e: log_error(e)
+
 def load_ui_for_char(name):
     try:
-        data = app_data.get(name, {"inventory": {}, "cores": [0,0,0]})
-        inv = data.get("inventory", {})
+        data = app_data.get(name, {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]})
+        
+        # GERİYE DÖNÜK UYUMLULUK: Eski "inventory" kayıtlarını "inventory_order" olarak aktarır. Kayıp yaşanmaz!
+        if "inventory" in data:
+            data["inventory_order"] = data.pop("inventory")
+        if "inventory_chaos" not in data:
+            data["inventory_chaos"] = {}
+        if "inventory_order" not in data:
+            data["inventory_order"] = {}
+            
+        if current_inv_tab == "order":
+            inv = data.get("inventory_order", {})
+        else:
+            inv = data.get("inventory_chaos", {})
+            
         cores = data.get("cores", [0,0,0])
+        
         for code in GEM_STATS:
             el = document.getElementById("gem_" + code)
             if el: el.value = str(inv.get(code, 0))
@@ -360,27 +407,29 @@ def load_ui_for_char(name):
         if c3: c3.selectedIndex = cores[2]
     except Exception as e: log_error(e)
 
-def get_ui_data():
-    inv = {}
+def save_data():
+    global app_data
     try:
+        if current_char not in app_data: return
+        
+        inv = {}
         for code in GEM_STATS:
             el = document.getElementById("gem_" + code)
             if el:
                 val = el.value
                 inv[code] = int(val) if val else 0
-        return {"inventory": inv, "cores": [
+                
+        # Hangi sekmedeysek oraya kaydeder
+        if current_inv_tab == "order":
+            app_data[current_char]["inventory_order"] = inv
+        else:
+            app_data[current_char]["inventory_chaos"] = inv
+            
+        app_data[current_char]["cores"] = [
             document.getElementById("core1").selectedIndex,
             document.getElementById("core2").selectedIndex,
             document.getElementById("core3").selectedIndex
-        ]}
-    except Exception as e: 
-        log_error(e)
-        return {"inventory": {}, "cores": [0,0,0]}
-
-def save_data():
-    global app_data
-    try:
-        app_data[current_char] = get_ui_data()
+        ]
         localStorage.setItem("astrogem_data", json.dumps(app_data))
     except Exception as e: log_error(e)
 
@@ -390,9 +439,9 @@ def load_data():
         stored = localStorage.getItem("astrogem_data")
         if stored: 
             app_data = json.loads(stored)
-            if not app_data: app_data = {"Karakter 1": {"inventory": {}, "cores": [0,0,0]}}
+            if not app_data: app_data = {"Karakter 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
         else: 
-            app_data = {"Karakter 1": {"inventory": {}, "cores": [0,0,0]}}
+            app_data = {"Karakter 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
         current_char = list(app_data.keys())[0]
         render_tabs()
         load_ui_for_char(current_char)
@@ -580,8 +629,8 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        # TAMAMEN GÜVENLİ PLAIN TEXT ÇIKTISI (HTML PARSER ÇÖKMESİNİ ENGELLER)
-        output = "=== " + current_char + " SONUÇLARI ===\n"
+        # BAŞLIĞA HANGİ ENVANTERİN KULLANILDIĞI EKLENDİ (ORDER/CHAOS)
+        output = "=== " + current_char + " (" + current_inv_tab.upper() + ") SONUÇLARI ===\n"
         output += "TOPLAM PUAN: " + str(best_score) + "\n"
         output += "-" * 35 + "\n"
         
@@ -654,7 +703,7 @@ def calculate_click(event):
             output += "-" * 35 + "\n"
         
         res_div.innerText = output
-        res_div.style.color = "#e2e8f0" # Rengi normale çevir
+        res_div.style.color = "#e2e8f0" 
 
     except Exception as e: log_error(e)
                             
@@ -691,7 +740,7 @@ def on_gem_change(event):
         save_data()
     except Exception as e: log_error(e)
 
-# --- SİSTEM BAŞLATMA VE HTML İNŞASI ---
+# SİSTEM BAŞLATMA
 try:
     gem_container = document.getElementById("gem-inputs")
     if gem_container:
@@ -756,6 +805,19 @@ try:
             change_proxy = create_proxy(on_gem_change)
             ui_proxies.append(change_proxy)
             input_el.addEventListener("change", change_proxy)
+
+    # Sekme değiştirme olaylarını bağla
+    btn_order = document.getElementById("btn-inv-order")
+    if btn_order:
+        order_proxy = create_proxy(lambda e: switch_inv_tab("order"))
+        ui_proxies.append(order_proxy)
+        btn_order.addEventListener("click", order_proxy)
+        
+    btn_chaos = document.getElementById("btn-inv-chaos")
+    if btn_chaos:
+        chaos_proxy = create_proxy(lambda e: switch_inv_tab("chaos"))
+        ui_proxies.append(chaos_proxy)
+        btn_chaos.addEventListener("click", chaos_proxy)
 
     load_data()
     

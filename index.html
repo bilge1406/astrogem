@@ -11,11 +11,8 @@
 
     <style>
         body { 
-            background-color: #0f172a; 
-            color: #f8fafc; 
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding: 20px 20px 60px 20px; 
+            background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 20px 20px 60px 20px; 
             background-image: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
             background-attachment: fixed;
         }
@@ -29,91 +26,65 @@
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 14px; margin-bottom: 25px; letter-spacing: 0.5px;}
         
-        .container { 
-            max-width: 1400px; margin: 0 auto; display: grid; 
-            grid-template-columns: 320px 320px 1fr; gap: 25px; align-items: start;
-        }
-
-        @media (max-width: 1100px) { .container { grid-template-columns: 1fr; } }
+        /* 3 SÜTUNLU YENİ YAPI: Orta alan (Envanter) daha geniş */
+        .container { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 280px 480px 1fr; gap: 25px; align-items: start; }
+        @media (max-width: 1150px) { .container { grid-template-columns: 1fr; } }
 
         .panel { 
-            background-color: #1e293b; padding: 25px; border-radius: 16px; border: 1px solid #334155; 
+            background-color: #1e293b; padding: 20px; border-radius: 16px; border: 1px solid #334155; 
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3), 0 8px 10px -6px rgba(0,0,0,0.2); position: relative; overflow: hidden;
         }
-        
-        .panel::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
-            background: linear-gradient(to right, #334155, #475569);
-        }
-
+        .panel::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(to right, #334155, #475569); }
         .panel:nth-child(1)::before { background: linear-gradient(to right, #f59e0b, #ef4444); } 
         .panel:nth-child(2)::before { background: linear-gradient(to right, #3b82f6, #8b5cf6); } 
         .panel:nth-child(3)::before { background: linear-gradient(to right, #10b981, #3b82f6); } 
         
-        h2 { color: #f1f5f9; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 20px;}
+        h2 { color: #f1f5f9; margin-top: 0; font-size: 1.2rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 20px;}
         
-        /* ENVANTER GRUPLAMA STİLLERİ */
-        .w-row {
-            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;
-            background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #1e293b;
+        /* ENVANTER İÇİ GRID (Yanyana 2 Grup) */
+        #gem-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
-        .w-label {
-            width: 100%; font-size: 13px; font-weight: 700; color: #94a3b8; margin-bottom: 10px;
-            text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px;
-        }
-        .gem-box {
-            display: flex; flex-direction: column; align-items: center; background: #0f172a;
-            padding: 10px 6px; border-radius: 10px; border: 1px solid #334155;
-            width: calc(25% - 6px); box-sizing: border-box; transition: all 0.2s ease;
-        }
+
+        /* ENVANTER GRUPLAMA STİLLERİ (Daha Kompakt) */
+        .w-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0; background: rgba(15, 23, 42, 0.4); padding: 12px 10px; border-radius: 12px; border: 1px solid #1e293b; align-content: flex-start;}
+        .w-label { width: 100%; font-size: 13px; font-weight: 800; color: #94a3b8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px dashed #334155; padding-bottom: 5px; text-align: center;}
+        
+        .gem-box { display: flex; flex-direction: column; align-items: center; background: #0f172a; padding: 8px 4px; border-radius: 8px; border: 1px solid #334155; width: calc(25% - 4.5px); box-sizing: border-box; transition: all 0.2s ease; }
         .gem-box:hover { border-color: #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
-        .gem-icon { 
-            width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            font-weight: 800; color: white; font-size: 14px; margin: 0 0 6px 0; cursor: pointer;
-            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            transition: transform 0.1s;
-        }
+        .gem-icon { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 12px; margin: 0 0 5px 0; cursor: pointer; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 2px 4px rgba(0,0,0,0.2); text-shadow: 1px 1px 2px rgba(0,0,0,0.5); transition: transform 0.1s; }
         .gem-icon:active { transform: scale(0.9) translateY(2px); }
-        .gem-pts { font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-weight: 700; }
-        .gem-box input[type="number"] { width: 100%; padding: 6px 0; font-size: 14px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
+        .gem-pts { font-size: 10px; color: #cbd5e1; margin-bottom: 5px; font-weight: 700; }
+        
+        .gem-box input[type="number"] { width: 100%; padding: 4px 0; font-size: 13px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
         .gem-box input[type="number"]:focus { outline: none; border-color: #38bdf8; }
         
-        select { 
-            width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif;
-            background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; 
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; 
-        }
+        select { width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
-        label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
+        label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;}
         
-        button { 
-            width: 100%; padding: 14px; margin-top: 10px; border: none; border-radius: 10px; 
-            font-weight: 700; cursor: pointer; font-size: 14px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 16px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 20px;} 
+        button { width: 100%; padding: 12px; margin-top: 10px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 15px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 20px;} 
         .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #34d399, #10b981); }
         .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } 
         .btn-reset:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3); }
         .btn-delete { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; } 
         .btn-delete:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(239, 68, 68, 0.3); }
-        .btn-hard-reset { background-color: transparent; color: #64748b; border: 1px dashed #475569; margin-top: 30px; font-size: 12px; padding: 12px; box-shadow: none; } 
+        .btn-hard-reset { background-color: transparent; color: #64748b; border: 1px dashed #475569; margin-top: 25px; font-size: 11px; padding: 10px; box-shadow: none; } 
         .btn-hard-reset:hover { border-color: #ef4444; color: #ef4444; background: rgba(239, 68, 68, 0.05); }
         
-        #result-area { 
-            background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
-            font-family: 'Consolas', 'Courier New', monospace; white-space: pre-wrap; 
-            min-height: 200px; max-height: 650px; overflow-y: auto; font-size: 14px; line-height: 1.5;
-            border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
-        }
+        /* SONUÇ ALANI - YENİ KART TASARIMI UYUMLU */
+        #result-area { background-color: #0f172a; color: #e2e8f0; padding: 15px; border-radius: 10px; font-family: 'Inter', sans-serif; min-height: 150px; max-height: 750px; overflow-y: auto; font-size: 14px; border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); }
         
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
         
-        .tabs { display: flex; margin-bottom: 30px; background-color: transparent; padding: 0; border-radius: 0; overflow-x: auto; gap: 10px; align-items: center; justify-content: center; }
-        .tab-btn { background-color: #1e293b; color: #94a3b8; padding: 10px 20px; border: 1px solid #334155; border-radius: 30px; font-weight: 600; font-size: 13px; width: auto; margin: 0; text-transform: none; letter-spacing: normal; }
+        .tabs { display: flex; margin-bottom: 25px; background-color: transparent; padding: 0; border-radius: 0; overflow-x: auto; gap: 10px; align-items: center; justify-content: center; }
+        .tab-btn { background-color: #1e293b; color: #94a3b8; padding: 8px 18px; border: 1px solid #334155; border-radius: 30px; font-weight: 600; font-size: 13px; width: auto; margin: 0; text-transform: none; letter-spacing: normal; }
         .tab-btn:hover { background-color: #334155; color: white; }
         .tab-btn.active { background: linear-gradient(135deg, #38bdf8, #3b82f6); color: white; border: none; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3); }
         .add-tab-btn { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px dashed #10b981; }
@@ -121,11 +92,7 @@
         
         #debug-console { margin-top: 20px; background: #000; color: #ef4444; font-family: monospace; padding: 15px; border-radius: 8px; border: 1px solid #ef4444; min-height: 50px; display: none; }
         
-        #joke-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px);
-            z-index: 9999; justify-content: center; align-items: center; flex-direction: column;
-        }
+        #joke-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
         #joke-gif { max-width: 80%; max-height: 60vh; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #38bdf8; }
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
         #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
@@ -153,7 +120,6 @@
     <div class="tabs" id="tab-container"></div>
 
     <div class="container">
-        
         <div class="panel">
             <h2>Core Ayarları</h2>
             <label>Sun Core:</label>
@@ -184,7 +150,7 @@
                 <button id="btn-delete-char" class="btn-delete">🗑️ ÇARI SİL</button>
             </div>
 
-            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FABRİKA AYARLARI (Tüm Verileri Sil)</button>
+            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FABRİKA AYARLARI</button>
         </div>
 
         <div class="panel">
@@ -196,7 +162,6 @@
             <h2>Analiz Sonuçları</h2>
             <div id="result-area">Sonuçlar burada görünecek...</div>
         </div>
-
     </div>
 
     <div id="debug-console">Hata Konsolu: Temiz</div>
@@ -214,7 +179,7 @@ def log_error(e):
         err_div = document.getElementById("debug-console")
         if err_div:
             err_div.style.display = "block"
-            err_div.innerText = "HATA:\n" + str(e) + "\n" + str(traceback.format_exc())
+            err_div.innerHTML = "HATA:<br>" + str(e) + "<br>" + str(traceback.format_exc())
     except: pass
 
 GEM_STATS = {
@@ -492,7 +457,7 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerText = "Hesaplanıyor... Lütfen bekleyin."
+        res_div.innerHTML = "<div style='text-align:center; padding: 20px; color: #fbbf24;'>Hesaplanıyor... Lütfen bekleyin.</div>"
         
         inventory = {}
         for code in GEM_STATS:
@@ -518,7 +483,7 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerText = "Envanter boş."
+            res_div.innerHTML = "<div style='color: #ef4444; text-align:center;'>Envanter boş. Lütfen taş ekleyin.</div>"
             return
 
         pools = []
@@ -607,8 +572,10 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        output = "=== " + current_char + " SONUÇLARI ===\n"
-        output += "TOPLAM PUAN: " + str(best_score) + "\n"
+        # YENİ KART TASARIMLI HTML ÇIKTISI OLUŞTURMA
+        output = "<div style='text-align:center; padding-bottom:15px; border-bottom:1px solid #334155; margin-bottom:15px;'>"
+        output += "<div style='color:#38bdf8; font-size:16px; font-weight:800; margin-bottom:5px; text-transform:uppercase;'>=== " + current_char + " SONUÇLARI ===</div>"
+        output += "<div style='color:#10b981; font-weight:800; font-size:15px;'>TOPLAM PUAN: " + str(best_score) + "</div></div>"
         
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
@@ -627,20 +594,24 @@ def calculate_click(event):
             pts = res["pts"]
             
             if pts >= p_target:
-                status = "✅"
+                status = "<span style='color:#10b981;'>✅ BAŞARILI</span>"
             elif pts >= s_target:
-                status = "⚠️ (Ara Hedef " + str(s_target) + "P)"
+                status = "<span style='color:#fbbf24;'>⚠️ (Ara Hedef " + str(s_target) + "P)</span>"
             elif pts >= t_target:
-                status = "⚠️ (Ara Hedef " + str(t_target) + "P)"
+                status = "<span style='color:#fbbf24;'>⚠️ (Ara Hedef " + str(t_target) + "P)</span>"
             else:
-                status = "❌"
+                status = "<span style='color:#ef4444;'>❌ BAŞARISIZ</span>"
             
-            output += "\n" + core_names[i] + " (" + str(cap) + "W): " + str(pts) + "/" + str(p_target) + " " + status + "\n"
-            gem_str = "+".join(res['gems']) if res['gems'] else "BOŞ"
-            output += "Tak: " + gem_str + "\n"
+            output += "<div style='background:rgba(30,41,59,0.5); border:1px solid #334155; border-radius:10px; padding:12px; margin-bottom:12px;'>"
+            output += "<div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;'>"
+            output += "<strong style='color:#e2e8f0; font-size:14px;'>" + core_names[i] + " (" + str(cap) + "W)</strong>"
+            output += "<span style='font-weight:700; font-size:13px;'>" + str(pts) + "/" + str(p_target) + " " + status + "</span>"
+            output += "</div>"
+            
+            gem_str = " + ".join(res['gems']) if res['gems'] else "BOŞ"
+            output += "<div style='color:#94a3b8; font-size:13px;'>Kullanılacak Taşlar: <span style='color:#f8fafc; font-weight:700; letter-spacing:1px;'>" + gem_str + "</span></div>"
             
             if pts < p_target:
-                output += "[ÖNERİLER]\n"
                 sugs = []
                 for r in range(1, 5):
                     for combo in combinations_with_replacement(all_gems, r):
@@ -679,13 +650,15 @@ def calculate_click(event):
                         shown.append(cstr)
                         cnt += 1
                         
-                        miss_str = ",".join(s['miss']) if s['miss'] else "Envanterde var (Boşta)"
-                        output += " 1. Bul: " + miss_str + "\n"
-                        output += "    Hedef: " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
+                        miss_str = ", ".join(s['miss']) if s['miss'] else "Envanterde var (Boşta)"
+                        output += "<div style='margin-top:10px; padding-top:10px; border-top:1px dashed #475569; font-size:12px; line-height:1.6;'>"
+                        output += "<span style='color:#fbbf24; font-weight:700;'>🎯 HEDEF ÖNERİSİ:</span> Dışarıdan Bulunacak: <strong style='color:white;'>" + miss_str + "</strong><br>"
+                        output += "<span style='color:#94a3b8;'>Eğer bulursan yeni dizilim şu olacak: </span><span style='color:white; font-weight:700;'>" + "+".join(s['combo']) + " (" + str(s['will']) + "W)</span>"
+                        output += "</div>"
                         if cnt >= 1: break
-            output += "-"*30 + "\n"
+            output += "</div>"
         
-        res_div.innerText = output
+        res_div.innerHTML = output
 
     except Exception as e: log_error(e)
                             
@@ -695,7 +668,7 @@ def reset_click(event):
             el = document.getElementById("gem_" + code)
             if el: el.value = 0
         res_div = document.getElementById("result-area")
-        if res_div: res_div.innerText = "Sayılar Sıfırlandı."
+        if res_div: res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>Sayılar Sıfırlandı.</div>"
         save_data()
     except Exception as e: log_error(e)
 
@@ -734,25 +707,21 @@ try:
         w_keys.sort()
         
         for w in w_keys:
-            # Satır Konteyneri
             row_div = document.createElement("div")
             row_div.className = "w-row"
             
-            # Etiket
             lbl_div = document.createElement("div")
             lbl_div.className = "w-label"
-            lbl_div.innerText = str(w) + " WİLLPOWER CORE GEMLERİ"
+            lbl_div.innerText = str(w) + " WILLPOWER" # BAŞLIK DÜZELTİLDİ
             row_div.appendChild(lbl_div)
             
             for code, stats in w_groups[w]:
                 color = stats['color']
                 pts = stats['pts']
                 
-                # Gem Kutusu
                 box_div = document.createElement("div")
                 box_div.className = "gem-box"
                 
-                # İkon
                 icon_div = document.createElement("div")
                 icon_div.className = "gem-icon"
                 icon_div.style.backgroundColor = color
@@ -761,13 +730,11 @@ try:
                 icon_div.innerText = code
                 box_div.appendChild(icon_div)
                 
-                # Puan Etiketi
                 pts_div = document.createElement("div")
                 pts_div.className = "gem-pts"
                 pts_div.innerText = str(pts) + "P"
                 box_div.appendChild(pts_div)
                 
-                # Input
                 inp = document.createElement("input")
                 inp.type = "number"
                 inp.id = "gem_" + code

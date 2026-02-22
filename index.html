@@ -543,11 +543,19 @@ def calculate_click(event):
         else:
             best_score = best_eval[5] # Toplam puanı Tuple'dan çekiyoruz
 
-        output = f"=== {current_char} SONUÇLARI ===\n"
+output = f"=== {current_char} SONUÇLARI ===\n"
         output += f"TOPLAM PUAN: {best_score}\n"
         
         all_gems = list(GEM_STATS.keys())
-        core_names = ["Sun Core", "Moon Core", "Star Core"] # İSİMLER BURADA DA DEĞİŞTİ
+        core_names = ["Sun Core", "Moon Core", "Star Core"]
+        
+        # YENİ: Kullanılmayan (boşta kalan) taşları hesapla
+        # Öneriler yapılırken "Benim elimde zaten var" diyebilmesi için
+        remaining_inv = inventory.copy()
+        for res in best_assign:
+            for g in res["gems"]:
+                if remaining_inv.get(g, 0) > 0:
+                    remaining_inv[g] -= 1
         
         for i, res in enumerate(best_assign):
             cap = core_caps[i]
@@ -576,15 +584,38 @@ def calculate_click(event):
                     for combo in combinations_with_replacement(all_gems, r):
                         w = sum(GEM_STATS[g]["will"] for g in combo)
                         p = sum(GEM_STATS[g]["pts"] for g in combo)
+                        
                         if w <= cap and p >= p_target:
                             need = Counter(combo)
-                            have = Counter(res["gems"])
-                            missing = list((need - have).elements())
-                            diff = sum(GEM_STATS[g]["pts"] for g in missing)
-                            sugs.append({"combo": combo, "miss": missing, "cost": len(missing), "diff": diff, "will": w})
+                            have_in_core = Counter(res["gems"])
+                            leftovers = Counter(remaining_inv)
+                            
+                            # Sahip olduğumuz toplam taş (O an core'da takılı olanlar + Envanterde boşta kalanlar)
+                            total_have = have_in_core + leftovers
+                            
+                            # Dışarıdan ekstra kaç taş bulması lazım?
+                            truly_missing = list((need - total_have).elements())
+                            
+                            cost = len(truly_missing)
+                            will_diff = cap - w  # Hedef W'ye ne kadar yakın? (0 ise tam doldurmuş demektir)
+                            pts_diff = p - p_target # Fazladan P israfı
+                            
+                            sugs.append({
+                                "combo": combo, 
+                                "miss": truly_missing, 
+                                "cost": cost, 
+                                "will_diff": will_diff, 
+                                "pts_diff": pts_diff, 
+                                "will": w
+                            })
                 
                 if sugs:
-                    sugs.sort(key=lambda x: (x["cost"], x["diff"], x["will"]))
+                    # YENİ SIRALAMA MANTIĞI:
+                    # 1. Önce maliyet (Dışarıdan en az taş bulma)
+                    # 2. Sonra Kapasite Kullanımı (Willpower'ı olabildiğince tam doldurma, will_diff sıfıra yakın olmalı)
+                    # 3. Sonra Puan İsrafı
+                    sugs.sort(key=lambda x: (x["cost"], x["will_diff"], x["pts_diff"]))
+                    
                     cnt = 0
                     shown = []
                     for s in sugs:
@@ -592,8 +623,10 @@ def calculate_click(event):
                         if cstr in shown: continue
                         shown.append(cstr)
                         cnt += 1
-                        output += f" {cnt}. Bul: {','.join(s['miss'])}\n"
-                        output += f"    Hedef: {'+'.join(s['combo'])}\n"
+                        
+                        miss_str = ",".join(s['miss']) if s['miss'] else "Envanterde var (Boşta)"
+                        output += f" 1. Bul: {miss_str}\n"
+                        output += f"    Hedef: {'+'.join(s['combo'])} ({s['will']}W)\n"
                         if cnt >= 1: break
             output += "-"*30 + "\n"
         
@@ -649,6 +682,7 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+
 
 
 

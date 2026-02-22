@@ -511,17 +511,22 @@ def calculate_click(event):
                     
                     current_max_single = max(c1["pts"], c2["pts"], c3["pts"])
 
-                    # YENİ: ÖZEL ÖNCELİK KURALLARI
-                    # 1. Öncelik: Sun ve Moon 14 veya üstü mü?
+                   # YENİ: ASIL HEDEF (PRIMARY) SAYACI (MUTLAK 1. ÖNCELİK)
+                    primary_success_count = 0
+                    if c1["pts"] >= primaries[0]: primary_success_count += 1
+                    if c2["pts"] >= primaries[1]: primary_success_count += 1
+                    if c3["pts"] >= primaries[2]: primary_success_count += 1
+
+                    # ÖZEL ÖNCELİK KURALLARI (Hedefler tutturulduktan sonra devreye girer)
                     sun_moon_14 = 1 if (c1["pts"] >= 14 and c2["pts"] >= 14) else 0
-                    
-                    # 2. Öncelik: 17P Öncelikleri
                     sun_17 = 1 if c1["pts"] >= 17 else 0
                     moon_17 = 1 if c2["pts"] >= 17 else 0
                     star_17 = 1 if c3["pts"] >= 17 else 0
                     
-                    # Karşılaştırma Paketi (En soldaki en değerli kuraldır)
-                    current_eval = (sun_moon_14, sun_17, moon_17, star_17, tier_score, current_score, current_max_single)
+                    # Karşılaştırma Paketi (TUPLE: En soldaki kural her zaman kazanır)
+                    # Artık 1. Sırada "primary_success_count" (Asıl hedefi tutturan core sayısı) var.
+                    # Algoritma kimseyi feda etmeyecek. Sadece herkes hedefini tutturduktan SONRA Sun Core'u 17 yapmaya çalışacak.
+                    current_eval = (primary_success_count, tier_score, sun_moon_14, sun_17, moon_17, star_17, current_score, current_max_single)
 
                     if current_eval > best_eval:
                         best_eval = current_eval
@@ -683,6 +688,7 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+
 
 
 

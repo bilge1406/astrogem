@@ -110,23 +110,23 @@
 
     <div class="container">
         
-        <div class="panel">
+<div class="panel">
             <h2>Core Ayarları</h2>
-            <label>Core 1:</label>
+            <label>Sun Core:</label>
             <select id="core1">
                 <option value="12">Legendary (12 WP)</option>
                 <option value="15" selected>Relic (15 WP)</option>
                 <option value="17">Ancient (17 WP)</option>
             </select>
             
-            <label>Core 2:</label>
+            <label>Moon Core:</label>
             <select id="core2">
                 <option value="12">Legendary (12 WP)</option>
                 <option value="15" selected>Relic (15 WP)</option>
                 <option value="17">Ancient (17 WP)</option>
             </select>
 
-            <label>Core 3:</label>
+            <label>Star Core:</label>
             <select id="core3">
                 <option value="12">Legendary (12 WP)</option>
                 <option value="15" selected>Relic (15 WP)</option>
@@ -446,9 +446,8 @@ def calculate_click(event):
             candidates = get_valid_combos(core_caps[i], inventory, available_types, primaries[i], secondaries[i], tertiaries[i])
             pools.append(candidates)
 
-        best_score = -1
-        best_tier_score = -1
-        best_max_single = -1
+        # YENİ DEĞERLENDİRME SİSTEMİ BAŞLANGICI
+        best_eval = (-1, -1, -1, -1, -1, -1, -1)
         best_assign = []
         found = False
 
@@ -482,7 +481,7 @@ def calculate_click(event):
                     
                     current_score = c1["pts"] + c2["pts"] + c3["pts"]
                     
-                    # YENİ: 3 AŞAMALI (TIER) PUANLAMASI
+                    # Eski Aşama Puanlaması (Korundu)
                     tier_score = 0
                     if c1["pts"] >= primaries[0]: tier_score += 3
                     elif c1["pts"] >= secondaries[0]: tier_score += 2
@@ -498,23 +497,22 @@ def calculate_click(event):
                     
                     current_max_single = max(c1["pts"], c2["pts"], c3["pts"])
 
-                    if tier_score > best_tier_score:
-                        best_tier_score = tier_score
-                        best_score = current_score
-                        best_max_single = current_max_single
+                    # YENİ: ÖZEL ÖNCELİK KURALLARI
+                    # 1. Öncelik: Sun ve Moon 14 veya üstü mü?
+                    sun_moon_14 = 1 if (c1["pts"] >= 14 and c2["pts"] >= 14) else 0
+                    
+                    # 2. Öncelik: 17P Öncelikleri
+                    sun_17 = 1 if c1["pts"] >= 17 else 0
+                    moon_17 = 1 if c2["pts"] >= 17 else 0
+                    star_17 = 1 if c3["pts"] >= 17 else 0
+                    
+                    # Karşılaştırma Paketi (En soldaki en değerli kuraldır)
+                    current_eval = (sun_moon_14, sun_17, moon_17, star_17, tier_score, current_score, current_max_single)
+
+                    if current_eval > best_eval:
+                        best_eval = current_eval
                         best_assign = [c1, c2, c3]
                         found = True
-                    elif tier_score == best_tier_score:
-                        if current_score > best_score:
-                            best_score = current_score
-                            best_max_single = current_max_single
-                            best_assign = [c1, c2, c3]
-                            found = True
-                        elif current_score == best_score:
-                            if current_max_single > best_max_single:
-                                best_max_single = current_max_single
-                                best_assign = [c1, c2, c3]
-                                found = True
         
         if not found:
             best_score = 0
@@ -528,11 +526,14 @@ def calculate_click(event):
                         if curr_inv.get(g,0)>0: curr_inv[g]-=1
                 best_assign.append(best)
                 best_score += best["pts"]
+        else:
+            best_score = best_eval[5] # Toplam puanı Tuple'dan çekiyoruz
 
         output = f"=== {current_char} SONUÇLARI ===\n"
         output += f"TOPLAM PUAN: {best_score}\n"
         
         all_gems = list(GEM_STATS.keys())
+        core_names = ["Sun Core", "Moon Core", "Star Core"] # İSİMLER BURADA DA DEĞİŞTİ
         
         for i, res in enumerate(best_assign):
             cap = core_caps[i]
@@ -541,7 +542,6 @@ def calculate_click(event):
             t_target = tertiaries[i]
             pts = res["pts"]
             
-            # GÖRSEL GERİ BİLDİRİM: Hangi hedef tutturulduğunu yazacak
             if pts >= p_target:
                 status = "✅"
             elif pts >= s_target:
@@ -551,7 +551,7 @@ def calculate_click(event):
             else:
                 status = "❌"
             
-            output += f"\nCore {i+1} ({cap}W): {pts}/{p_target} {status}\n"
+            output += f"\n{core_names[i]} ({cap}W): {pts}/{p_target} {status}\n"
             gem_str = "+".join(res['gems']) if res['gems'] else 'BOŞ'
             output += f"Tak: {gem_str}\n"
             
@@ -586,7 +586,7 @@ def calculate_click(event):
         res_div.innerHTML = output
 
     except Exception as e: log_error(e)
-
+                            
 def reset_click(event):
     try:
         for code in GEM_STATS:
@@ -635,6 +635,7 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+
 
 
 

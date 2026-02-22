@@ -52,7 +52,7 @@
         
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.3rem; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 20px;}
         
-        /* YENİ ENVANTER TASARIMI */
+        /* ENVANTER GRUPLAMA STİLLERİ */
         .w-row {
             display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px;
             background: rgba(15, 23, 42, 0.4); padding: 12px; border-radius: 12px; border: 1px solid #1e293b;
@@ -64,7 +64,7 @@
         .gem-box {
             display: flex; flex-direction: column; align-items: center; background: #0f172a;
             padding: 10px 6px; border-radius: 10px; border: 1px solid #334155;
-            width: calc(25% - 6px); /* 4 Sütun */ box-sizing: border-box; transition: all 0.2s ease;
+            width: calc(25% - 6px); box-sizing: border-box; transition: all 0.2s ease;
         }
         .gem-box:hover { border-color: #38bdf8; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
         .gem-icon { 
@@ -75,14 +75,15 @@
         }
         .gem-icon:active { transform: scale(0.9) translateY(2px); }
         .gem-pts { font-size: 11px; color: #cbd5e1; margin-bottom: 6px; font-weight: 700; }
-        .gem-box input[type="number"] { width: 100%; padding: 6px 0; font-size: 14px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; }
+        .gem-box input[type="number"] { width: 100%; padding: 6px 0; font-size: 14px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
+        .gem-box input[type="number"]:focus { outline: none; border-color: #38bdf8; }
         
-        input[type="number"], select { 
-            background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; border-radius: 8px; 
-            padding: 10px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; transition: all 0.2s ease;
+        select { 
+            width: 100%; margin-bottom: 15px; padding: 10px; border-radius: 8px; font-weight: 600; font-family: 'Inter', sans-serif;
+            background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; 
         }
-        select { width: 100%; margin-bottom: 15px; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
-        input[type="number"]:focus, select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
+        select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2); }
         label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 5px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px;}
         
         button { 
@@ -240,8 +241,6 @@ TERTIARY_SCORES = {12: 10, 15: 10, 17: 10}
 
 current_char = ""
 app_data = {}
-
-# GC Hatalarını önlemek için Proxyleri burada tutuyoruz
 ui_proxies = []
 
 def check_for_joke(name):
@@ -261,7 +260,7 @@ def check_for_joke(name):
         overlay.style.display = "flex"
         document.getElementById("audio-gay").play()
     
-    if name == "Abdüllrezzak":
+    elif name == "Abdüllrezzak":
         text.innerHTML= "REAPER 1760TAN SONRA AÇILIYOMUŞ"
         gif.src = "reaper.gif"
         overlay.style.display = "flex"
@@ -695,7 +694,6 @@ try:
         
     gem_container.innerHTML = html_str
 
-    # Taşa tıklandığında sayıyı artırma
     def increment_gem(event):
         code = event.currentTarget.id.split("_")[1]
         el = document.getElementById(f"gem_{code}")
@@ -703,7 +701,6 @@ try:
         el.value = int(val) + 1 if val else 1
         save_data()
 
-    # Olayları (Events) bağlama
     for code in GEM_STATS.keys():
         icon_el = document.getElementById(f"icon_{code}")
         i_proxy = create_proxy(increment_gem)

@@ -543,7 +543,8 @@ def calculate_click(event):
         else:
             best_score = best_eval[5] # Toplam puanı Tuple'dan çekiyoruz
 
-output = f"=== {current_char} SONUÇLARI ===\n"
+ 
+        output = f"=== {current_char} SONUÇLARI ===\n"
         output += f"TOPLAM PUAN: {best_score}\n"
         
         all_gems = list(GEM_STATS.keys())
@@ -682,6 +683,7 @@ except Exception as e: log_error(e)
 </py-script>
 </body>
 </html>
+
 
 
 

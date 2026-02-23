@@ -93,7 +93,7 @@
         
         #result-area { 
             background-color: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 10px; 
-            font-family: 'Consolas', monospace; white-space: pre-wrap; 
+            font-family: 'Inter', sans-serif; white-space: pre-wrap; 
             min-height: 200px; max-height: 700px; overflow-y: auto; font-size: 14px; 
             border: 1px solid #334155; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); 
             line-height: 1.6;
@@ -202,6 +202,9 @@ import json
 from pyodide.ffi import create_proxy
 import traceback
 
+LT = chr(60)
+GT = chr(62)
+
 def log_error(e):
     try:
         err_div = document.getElementById("debug-console")
@@ -236,7 +239,7 @@ LANG = {
         "sub_target": "Ara Hedef",
         "equip": "Takılacaklar",
         "empty": "BOŞ",
-        "suggestion": "🎯 HEDEF ÖNERİSİ",
+        "suggestion": "HEDEF ÖNERİSİ",
         "need_find": "Bulunması Gereken",
         "in_inv": "Envanterde var",
         "new_layout": "Yeni Dizilim",
@@ -270,7 +273,7 @@ LANG = {
         "sub_target": "Sub-Target",
         "equip": "Equip",
         "empty": "EMPTY",
-        "suggestion": "🎯 SUGGESTION",
+        "suggestion": "SUGGESTION",
         "need_find": "Need to Find",
         "in_inv": "In inventory",
         "new_layout": "New Layout",
@@ -285,6 +288,13 @@ current_lang = "en"
 
 def T(key):
     return LANG.get(current_lang, LANG["en"]).get(key, key)
+
+def safe_msg(text, color="#e2e8f0"):
+    res_div = document.getElementById("result-area")
+    if res_div:
+        res_div.innerText = text
+        res_div.style.color = color
+        res_div.style.textAlign = "center"
 
 GEM_STATS = {
     "S": {"will": 3, "pts": 5, "color": "#ef4444"},
@@ -406,11 +416,7 @@ def add_character(event=None):
             save_data()
             render_tabs()
             load_ui_for_char(current_char)
-            res_div = document.getElementById("result-area")
-            if res_div: 
-                res_div.innerText = "--- '" + current_char + "' " + T("created") + " ---"
-                res_div.style.color = "#10b981"
-                res_div.style.textAlign = "center"
+            safe_msg("--- '" + current_char + "' " + T("created") + " ---", "#10b981")
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
@@ -425,11 +431,7 @@ def delete_character(event=None):
             save_data()
             render_tabs()
             load_ui_for_char(current_char)
-            res_div = document.getElementById("result-area")
-            if res_div: 
-                res_div.innerText = T("deleted") + "\n--- " + current_char + " " + T("loaded") + " ---"
-                res_div.style.color = "#ef4444"
-                res_div.style.textAlign = "center"
+            safe_msg(T("deleted") + "\n--- " + current_char + " " + T("loaded") + " ---", "#ef4444")
     except Exception as e: log_error(e)
 
 def switch_tab_event(event):
@@ -476,11 +478,7 @@ def switch_tab(new_name):
         current_char = new_name
         render_tabs()
         load_ui_for_char(current_char)
-        res_div = document.getElementById("result-area")
-        if res_div: 
-            res_div.innerText = "--- " + current_char + " " + T("loaded") + " ---"
-            res_div.style.color = "#38bdf8"
-            res_div.style.textAlign = "center"
+        safe_msg("--- " + current_char + " " + T("loaded") + " ---", "#38bdf8")
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
@@ -671,9 +669,7 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerText = T("calc_wait")
-        res_div.style.color = "#fbbf24"
-        res_div.style.textAlign = "center"
+        safe_msg(T("calc_wait"), "#fbbf24")
         
         inventory = {}
         for code in GEM_STATS:
@@ -699,9 +695,7 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerText = T("inv_empty")
-            res_div.style.color = "#ef4444"
-            res_div.style.textAlign = "center"
+            safe_msg(T("inv_empty"), "#ef4444")
             return
 
         pools = []
@@ -790,9 +784,11 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        output = "=== " + current_char + " (" + current_inv_tab.upper() + ") " + T("results_title") + " ===\n"
-        output += T("total_pts") + ": " + str(best_score) + "\n"
-        output += "-" * 35 + "\n"
+        # GÜVENLİ HTML OLUŞTURMA BAŞLANGICI
+        out_html = f"{LT}div style='text-align:center; padding-bottom:10px; border-bottom:1px solid #334155; margin-bottom:15px;'{GT}"
+        out_html += f"{LT}div style='color:#38bdf8; font-weight:800; font-size:16px; text-transform:uppercase;'{GT}=== {current_char} ({current_inv_tab.upper()}) ==={LT}/div{GT}"
+        out_html += f"{LT}div style='color:#10b981; font-weight:800; font-size:14px; margin-top:5px;'{GT}{T('total_pts')}: {best_score}{LT}/div{GT}"
+        out_html += f"{LT}/div{GT}"
         
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
@@ -815,19 +811,25 @@ def calculate_click(event):
             pts = res["pts"]
             
             if pts >= p_target:
-                status = T("success")
+                status = f"{LT}span style='color:#10b981;'{GT}{T('success')}{LT}/span{GT}"
             elif pts >= s_target:
-                status = "⚠️ (" + T("sub_target") + " " + str(s_target) + "P)"
+                status = f"{LT}span style='color:#fbbf24;'{GT}⚠️ ({T('sub_target')} {s_target}P){LT}/span{GT}"
             elif pts >= t_target:
-                status = "⚠️ (" + T("sub_target") + " " + str(t_target) + "P)"
+                status = f"{LT}span style='color:#fbbf24;'{GT}⚠️ ({T('sub_target')} {t_target}P){LT}/span{GT}"
             else:
-                status = T("fail")
+                status = f"{LT}span style='color:#ef4444;'{GT}{T('fail')}{LT}/span{GT}"
             
-            img_tag = "<im" + "g src='" + icons[i] + "' alt='icon' style='width:24px; height:24px; vertical-align:middle; margin-right:8px; border-radius:4px;'>"
-            output += "\n" + img_tag + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
+            out_html += f"{LT}div style='background:rgba(30,41,59,0.5); border:1px solid #334155; border-radius:10px; padding:12px; margin-bottom:12px;'{GT}"
+            
+            img_t = f"{LT}img src='{icons[i]}' alt='icon' style='width:24px; height:24px; vertical-align:middle; margin-right:8px; border-radius:4px;'{GT}"
+            
+            out_html += f"{LT}div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; padding-bottom:8px; border-bottom:1px dashed #334155;'{GT}"
+            out_html += f"{LT}div style='color:#e2e8f0; font-weight:bold; font-size:14px; display:flex; align-items:center;'{GT}{img_t}{core_names[i]} ({cap}W){LT}/div{GT}"
+            out_html += f"{LT}div style='font-weight:bold; font-size:13px;'{GT}{pts} / {p_target} {status}{LT}/div{GT}"
+            out_html += f"{LT}/div{GT}"
             
             gem_str = " + ".join(res['gems']) if res['gems'] else T("empty")
-            output += T("equip") + ": " + gem_str + "\n"
+            out_html += f"{LT}div style='color:#94a3b8; font-size:13px;'{GT}{T('equip')}: {LT}span style='color:#f8fafc; font-weight:bold; letter-spacing:1px;'{GT}{gem_str}{LT}/span{GT}{LT}/div{GT}"
             
             if p_target > pts:
                 sugs = []
@@ -861,14 +863,16 @@ def calculate_click(event):
                     sugs.sort(key=lambda x: (x["cost"], x["will_diff"], x["pts_diff"]))
                     s = sugs[0]
                     miss_str = ", ".join(s['miss']) if s['miss'] else T("in_inv")
-                    output += "\n[ " + T("suggestion") + " ]\n"
-                    output += T("need_find") + ": " + miss_str + "\n"
-                    output += T("new_layout") + ": " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
+                    out_html += f"{LT}div style='margin-top:10px; background:rgba(0,0,0,0.2); padding:8px; border-radius:6px; font-size:12px; line-height:1.6;'{GT}"
+                    out_html += f"{LT}span style='color:#fbbf24; font-weight:bold;'{GT}🎯 {T('suggestion')}{LT}/span{GT}{LT}br{GT}"
+                    out_html += f"{LT}span style='color:#94a3b8;'{GT}{T('need_find')}: {LT}/span{GT}{LT}strong style='color:white;'{GT}{miss_str}{LT}/strong{GT}{LT}br{GT}"
+                    out_html += f"{LT}span style='color:#94a3b8;'{GT}{T('new_layout')}: {LT}/span{GT}{LT}strong style='color:white;'{GT}{'+'.join(s['combo'])} ({s['will']}W){LT}/strong{GT}"
+                    out_html += f"{LT}/div{GT}"
                     
-            output += "-" * 35 + "\n"
+            out_html += f"{LT}/div{GT}"
         
-        res_div.innerHTML = output
-        res_div.style.color = "#e2e8f0" 
+        res_div.innerHTML = out_html
+        res_div.style.color = "#e2e8f0"
         res_div.style.textAlign = "left"
 
     except Exception as e: log_error(e)
@@ -878,11 +882,7 @@ def reset_click(event):
         for code in GEM_STATS:
             el = document.getElementById("gem_" + code)
             if el: el.value = "0"
-        res_div = document.getElementById("result-area")
-        if res_div: 
-            res_div.innerText = T("reset_msg")
-            res_div.style.color = "#10b981"
-            res_div.style.textAlign = "center"
+        safe_msg(T("reset_msg"), "#10b981")
         save_data()
     except Exception as e: log_error(e)
 
@@ -891,7 +891,6 @@ def hard_reset_click(event):
         localStorage.removeItem("astrogem_data")
         window.location.reload()
 
-# --- MODULE LEVEL OLAY YARDIMCILARI ---
 def increment_gem(event):
     try:
         code = event.currentTarget.id.split("_")[1]
@@ -907,7 +906,7 @@ def on_gem_change(event):
         save_data()
     except Exception as e: log_error(e)
 
-# SİSTEM BAŞLATMA
+# SİSTEM BAŞLATMA (GÜVENLİ DOM OLUŞTURMA)
 try:
     gem_container = document.getElementById("gem-inputs")
     if gem_container:

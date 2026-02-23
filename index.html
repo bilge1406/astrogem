@@ -27,7 +27,7 @@
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 13px; margin-bottom: 15px; letter-spacing: 0.5px;}
         
-        .container { max-width: 1450px; margin: 0 auto; display: grid; grid-template-columns: 260px 480px 1fr; gap: 15px; align-items: start; }
+        .container { max-width: 1450px; margin: 0 auto; display: grid; grid-template-columns: 280px 480px 1fr; gap: 15px; align-items: start; }
         @media (max-width: 1150px) { .container { grid-template-columns: 1fr; } }
 
         .panel { 
@@ -66,12 +66,12 @@
         }
         input[type=number] { -moz-appearance: textfield; }
         
-        select { width: 100%; margin-bottom: 12px; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
+        select { width: 100%; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
-        label { font-weight: 600; color: #94a3b8; display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
+        label { font-weight: 600; color: #94a3b8; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
         
         button { width: 100%; padding: 10px; margin-top: 8px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 14px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 15px;} 
+        .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 14px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 25px;} 
         .btn-calc:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); background: linear-gradient(135deg, #34d399, #10b981); }
         .btn-reset { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; } 
         .btn-reset:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3); }
@@ -114,6 +114,14 @@
             transition: 0.2s; z-index: 1000; text-transform: none; letter-spacing: normal;
         }
         #btn-lang:hover { background: #334155; border-color: #38bdf8; color: white; }
+
+        .core-row { margin-bottom: 15px; }
+        .core-header { display: flex; justify-content: space-between; margin-bottom: 4px; align-items: flex-end; }
+        .auto-label { font-size: 11px; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: 600; }
+        .auto-label input { cursor: pointer; }
+        .core-flex { display: flex; gap: 8px; align-items: center; }
+        .target-box { flex: 1; align-items: center; gap: 6px; }
+        .target-select { color: #38bdf8; border-color: #38bdf8; }
     </style>
 </head>
 <body>
@@ -144,26 +152,81 @@
     <div class="container">
         <div class="panel">
             <h2 id="title-core">Core Settings</h2>
-            <label>Sun Core:</label>
-            <select id="core1">
-                <option value="12">Legendary (12 WP)</option>
-                <option value="15" selected>Relic (15 WP)</option>
-                <option value="17">Ancient (17 WP)</option>
-            </select>
             
-            <label>Moon Core:</label>
-            <select id="core2">
-                <option value="12">Legendary (12 WP)</option>
-                <option value="15" selected>Relic (15 WP)</option>
-                <option value="17">Ancient (17 WP)</option>
-            </select>
+            <div class="core-row">
+                <div class="core-header">
+                    <label style="margin:0;">Sun Core:</label>
+                    <label class="auto-label">
+                        <input type="checkbox" id="auto1" checked> <span id="lbl-auto1">Auto</span>
+                    </label>
+                </div>
+                <div class="core-flex">
+                    <select id="core1" style="flex: 1; margin:0;">
+                        <option value="12">Legendary (12 WP)</option>
+                        <option value="15" selected>Relic (15 WP)</option>
+                        <option value="17">Ancient (17 WP)</option>
+                    </select>
+                    <div id="box-target1" class="target-box" style="display: none;">
+                        <span style="font-size: 11px; font-weight: 600; color: #38bdf8;" id="lbl-tgt1">Target:</span>
+                        <select id="target1" class="target-select" style="flex: 1; margin:0;">
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="16">16</option><option value="17" selected>17</option><option value="18">18</option>
+                            <option value="19">19</option><option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            <label>Star Core:</label>
-            <select id="core3">
-                <option value="12">Legendary (12 WP)</option>
-                <option value="15" selected>Relic (15 WP)</option>
-                <option value="17">Ancient (17 WP)</option>
-            </select>
+            <div class="core-row">
+                <div class="core-header">
+                    <label style="margin:0;">Moon Core:</label>
+                    <label class="auto-label">
+                        <input type="checkbox" id="auto2" checked> <span id="lbl-auto2">Auto</span>
+                    </label>
+                </div>
+                <div class="core-flex">
+                    <select id="core2" style="flex: 1; margin:0;">
+                        <option value="12">Legendary (12 WP)</option>
+                        <option value="15" selected>Relic (15 WP)</option>
+                        <option value="17">Ancient (17 WP)</option>
+                    </select>
+                    <div id="box-target2" class="target-box" style="display: none;">
+                        <span style="font-size: 11px; font-weight: 600; color: #38bdf8;" id="lbl-tgt2">Target:</span>
+                        <select id="target2" class="target-select" style="flex: 1; margin:0;">
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="16">16</option><option value="17" selected>17</option><option value="18">18</option>
+                            <option value="19">19</option><option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="core-row">
+                <div class="core-header">
+                    <label style="margin:0;">Star Core:</label>
+                    <label class="auto-label">
+                        <input type="checkbox" id="auto3" checked> <span id="lbl-auto3">Auto</span>
+                    </label>
+                </div>
+                <div class="core-flex">
+                    <select id="core3" style="flex: 1; margin:0;">
+                        <option value="12">Legendary (12 WP)</option>
+                        <option value="15" selected>Relic (15 WP)</option>
+                        <option value="17">Ancient (17 WP)</option>
+                    </select>
+                    <div id="box-target3" class="target-box" style="display: none;">
+                        <span style="font-size: 11px; font-weight: 600; color: #38bdf8;" id="lbl-tgt3">Target:</span>
+                        <select id="target3" class="target-select" style="flex: 1; margin:0;">
+                            <option value="10">10</option><option value="11">11</option><option value="12">12</option>
+                            <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+                            <option value="16">16</option><option value="17" selected>17</option><option value="18">18</option>
+                            <option value="19">19</option><option value="20">20</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
             <button id="btn-calculate" class="btn-calc">CALCULATE & SAVE</button>
             
@@ -246,7 +309,9 @@ LANG = {
         "reset_msg": "Sayılar Sıfırlandı.",
         "hard_reset_warn": "DİKKAT: Tüm karakterler ve veriler silinecek. Emin misiniz?",
         "sys_ready": "Sistem Hazır! 🎉",
-        "click_add": "Tıkla ve 1 Ekle"
+        "click_add": "Tıkla ve 1 Ekle",
+        "auto_target": "Auto",
+        "lbl_target": "Hedef:"
     },
     "en": {
         "core_settings": "Core Settings",
@@ -280,7 +345,9 @@ LANG = {
         "reset_msg": "Numbers Reset.",
         "hard_reset_warn": "WARNING: All characters and data will be deleted. Are you sure?",
         "sys_ready": "System Ready! 🎉",
-        "click_add": "Click to add 1"
+        "click_add": "Click to add 1",
+        "auto_target": "Auto",
+        "lbl_target": "Target:"
     }
 }
 
@@ -374,6 +441,12 @@ def apply_language():
         document.getElementById("btn-delete-char").innerText = T("del_btn")
         document.getElementById("btn-hard-reset").innerText = T("hard_reset_btn")
         
+        for i in range(1,4):
+            lbl_auto = document.getElementById(f"lbl-auto{i}")
+            if lbl_auto: lbl_auto.innerText = T("auto_target")
+            lbl_tgt = document.getElementById(f"lbl-tgt{i}")
+            if lbl_tgt: lbl_tgt.innerText = T("lbl_target")
+
         lang_btn = document.getElementById("btn-lang")
         if lang_btn:
             lang_btn.innerText = "🌐 TR" if current_lang == "en" else "🌐 EN"
@@ -410,7 +483,7 @@ def add_character(event=None):
                 window.alert(T("alert_exists"))
                 return
             check_for_joke(new_name)
-            app_data[new_name] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
+            app_data[new_name] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0], "targets": [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}]}
             global current_char
             current_char = new_name
             save_data()
@@ -426,7 +499,7 @@ def delete_character(event=None):
         if window.confirm(msg):
             del app_data[current_char]
             if not app_data:
-                app_data["Character 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
+                app_data["Character 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0], "targets": [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}]}
             current_char = list(app_data.keys())[0]
             save_data()
             render_tabs()
@@ -515,7 +588,7 @@ def switch_inv_tab(tab):
 
 def load_ui_for_char(name):
     try:
-        data = app_data.get(name, {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]})
+        data = app_data.get(name, {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0], "targets": []})
         
         if "inventory" in data:
             data["inventory_order"] = data.pop("inventory")
@@ -530,17 +603,30 @@ def load_ui_for_char(name):
             inv = data.get("inventory_chaos", {})
             
         cores = data.get("cores", [0,0,0])
+        targets = data.get("targets", [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}])
+        if not targets or len(targets) < 3:
+            targets = [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}]
         
         for code in GEM_STATS:
             el = document.getElementById("gem_" + code)
             if el: el.value = str(inv.get(code, 0))
         
-        c1 = document.getElementById("core1")
-        if c1: c1.selectedIndex = cores[0]
-        c2 = document.getElementById("core2")
-        if c2: c2.selectedIndex = cores[1]
-        c3 = document.getElementById("core3")
-        if c3: c3.selectedIndex = cores[2]
+        for i in range(1, 4):
+            c_el = document.getElementById(f"core{i}")
+            if c_el: c_el.selectedIndex = cores[i-1]
+            
+            a_el = document.getElementById(f"auto{i}")
+            t_el = document.getElementById(f"target{i}")
+            box = document.getElementById(f"box-target{i}")
+            
+            if a_el and t_el and box:
+                a_el.checked = targets[i-1]["auto"]
+                t_el.value = str(targets[i-1]["val"])
+                if a_el.checked:
+                    box.style.display = "none"
+                else:
+                    box.style.display = "flex"
+                    
     except Exception as e: log_error(e)
 
 def get_ui_data():
@@ -551,37 +637,39 @@ def get_ui_data():
             if el:
                 val = el.value
                 inv[code] = int(val) if val else 0
+                
+        targets = []
+        for i in range(1, 4):
+            a_el = document.getElementById(f"auto{i}")
+            t_el = document.getElementById(f"target{i}")
+            if a_el and t_el:
+                targets.append({"auto": a_el.checked, "val": int(t_el.value)})
+            else:
+                targets.append({"auto": True, "val": 17})
+                
         return {"inventory": inv, "cores": [
             document.getElementById("core1").selectedIndex,
             document.getElementById("core2").selectedIndex,
             document.getElementById("core3").selectedIndex
-        ]}
+        ], "targets": targets}
     except Exception as e: 
         log_error(e)
-        return {"inventory": {}, "cores": [0,0,0]}
+        return {"inventory": {}, "cores": [0,0,0], "targets": [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}]}
 
 def save_data():
     global app_data
     try:
         if current_char not in app_data: return
+        data = get_ui_data()
         
-        inv = {}
-        for code in GEM_STATS:
-            el = document.getElementById("gem_" + code)
-            if el:
-                val = el.value
-                inv[code] = int(val) if val else 0
-                
         if current_inv_tab == "order":
-            app_data[current_char]["inventory_order"] = inv
+            app_data[current_char]["inventory_order"] = data["inventory"]
         else:
-            app_data[current_char]["inventory_chaos"] = inv
+            app_data[current_char]["inventory_chaos"] = data["inventory"]
             
-        app_data[current_char]["cores"] = [
-            document.getElementById("core1").selectedIndex,
-            document.getElementById("core2").selectedIndex,
-            document.getElementById("core3").selectedIndex
-        ]
+        app_data[current_char]["cores"] = data["cores"]
+        app_data[current_char]["targets"] = data["targets"]
+        
         localStorage.setItem("astrogem_data", json.dumps(app_data))
     except Exception as e: log_error(e)
 
@@ -595,9 +683,9 @@ def load_data():
         stored = localStorage.getItem("astrogem_data")
         if stored: 
             app_data = json.loads(stored)
-            if not app_data: app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
+            if not app_data: app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0], "targets": []}}
         else: 
-            app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
+            app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0], "targets": []}}
         current_char = list(app_data.keys())[0]
         
         apply_language() 
@@ -686,12 +774,25 @@ def calculate_click(event):
         tertiaries = []
         for i in range(1, 4):
             el = document.getElementById("core" + str(i))
-            if el:
+            auto_el = document.getElementById("auto" + str(i))
+            tgt_el = document.getElementById("target" + str(i))
+            
+            if el and auto_el and tgt_el:
                 val = int(el.value)
                 core_caps.append(val)
-                primaries.append(TARGET_SCORES[val])
-                secondaries.append(SECONDARY_SCORES[val])
-                tertiaries.append(TERTIARY_SCORES[val])
+                
+                if auto_el.checked:
+                    p_tgt = TARGET_SCORES[val]
+                    s_tgt = SECONDARY_SCORES[val]
+                    t_tgt = TERTIARY_SCORES[val]
+                else:
+                    p_tgt = int(tgt_el.value)
+                    s_tgt = min(SECONDARY_SCORES[val], p_tgt)
+                    t_tgt = min(TERTIARY_SCORES[val], s_tgt)
+                    
+                primaries.append(p_tgt)
+                secondaries.append(s_tgt)
+                tertiaries.append(t_tgt)
         
         available_types = list(inventory.keys())
         if not available_types:
@@ -784,7 +885,6 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        # GÜVENLİ HTML OLUŞTURMA BAŞLANGICI
         out_html = f"{LT}div style='text-align:center; padding-bottom:10px; border-bottom:1px solid #334155; margin-bottom:15px;'{GT}"
         out_html += f"{LT}div style='color:#38bdf8; font-weight:800; font-size:16px; text-transform:uppercase;'{GT}=== {current_char} ({current_inv_tab.upper()}) ==={LT}/div{GT}"
         out_html += f"{LT}div style='color:#10b981; font-weight:800; font-size:14px; margin-top:5px;'{GT}{T('total_pts')}: {best_score}{LT}/div{GT}"
@@ -906,7 +1006,17 @@ def on_gem_change(event):
         save_data()
     except Exception as e: log_error(e)
 
-# SİSTEM BAŞLATMA (GÜVENLİ DOM OLUŞTURMA)
+def on_auto_change(event):
+    try:
+        idx = event.currentTarget.id[-1]
+        is_auto = event.currentTarget.checked
+        box = document.getElementById("box-target" + idx)
+        if box:
+            box.style.display = "none" if is_auto else "flex"
+        save_data()
+    except Exception as e: log_error(e)
+
+# SİSTEM BAŞLATMA
 try:
     gem_container = document.getElementById("gem-inputs")
     if gem_container:
@@ -958,6 +1068,7 @@ try:
                 
             gem_container.appendChild(row_div)
 
+    # Event Listeners (Bağlantılar)
     for code in GEM_STATS.keys():
         icon_el = document.getElementById("icon_" + code)
         if icon_el:
@@ -971,7 +1082,26 @@ try:
             ui_proxies.append(change_proxy)
             input_el.addEventListener("change", change_proxy)
 
-    # Sekme olayları
+    # Core ve Target Ayar Olayları
+    for i in range(1, 4):
+        auto_el = document.getElementById("auto" + str(i))
+        if auto_el:
+            ap_proxy = create_proxy(on_auto_change)
+            ui_proxies.append(ap_proxy)
+            auto_el.addEventListener("change", ap_proxy)
+            
+        tgt_el = document.getElementById("target" + str(i))
+        if tgt_el:
+            tp_proxy = create_proxy(on_gem_change)
+            ui_proxies.append(tp_proxy)
+            tgt_el.addEventListener("change", tp_proxy)
+            
+        core_el = document.getElementById("core" + str(i))
+        if core_el:
+            cp_proxy = create_proxy(on_gem_change)
+            ui_proxies.append(cp_proxy)
+            core_el.addEventListener("change", cp_proxy)
+
     btn_order = document.getElementById("btn-inv-order")
     if btn_order:
         order_proxy = create_proxy(lambda e: switch_inv_tab("order"))
@@ -984,7 +1114,6 @@ try:
         ui_proxies.append(chaos_proxy)
         btn_chaos.addEventListener("click", chaos_proxy)
 
-    # Dil butonu olayları
     lang_btn = document.getElementById("btn-lang")
     if lang_btn:
         lang_proxy = create_proxy(toggle_lang)

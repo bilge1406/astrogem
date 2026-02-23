@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +100,7 @@
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
         #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
 
-        /* YENİ DİL BUTONU - SOL ÜST KÖŞE VE KÜÇÜK */
+        /* DÜNYA İKONLU DİL BUTONU - SOL ÜST KÖŞE VE KÜÇÜK */
         #btn-lang {
             position: fixed; left: 20px; top: 20px; width: auto; margin: 0;
             background: #1e293b; color: #94a3b8; border: 1px solid #334155; 
@@ -124,21 +124,21 @@
             document.getElementById('audio-chaewon').currentTime = 0;
             document.getElementById('audio-gay').pause();
             document.getElementById('audio-gay').currentTime = 0;
-        ">KAPAT</button>
+        ">CLOSE</button>
 </div>
     
-    <button id="btn-lang">🇬🇧 EN</button>
+    <button id="btn-lang">🌐 TR</button>
 
     <div style="max-width: 1450px; margin: 0 auto; position: relative;">
         <h1>Lost Ark Astrogem</h1>
-        <div id="status-msg">Sistem Yükleniyor...</div>
+        <div id="status-msg">System Loading...</div>
     </div>
 
     <div class="tabs" id="tab-container"></div>
 
     <div class="container">
         <div class="panel">
-            <h2 id="title-core">Core Ayarları</h2>
+            <h2 id="title-core">Core Settings</h2>
             <label>Sun Core:</label>
             <select id="core1">
                 <option value="12">Legendary (12 WP)</option>
@@ -160,19 +160,19 @@
                 <option value="17">Ancient (17 WP)</option>
             </select>
 
-            <button id="btn-calculate" class="btn-calc">HESAPLA & KAYDET</button>
+            <button id="btn-calculate" class="btn-calc">CALCULATE & SAVE</button>
             
             <div style="display: flex; gap: 8px;">
-                <button id="btn-reset" class="btn-reset">↺ SIFIRLA</button>
-                <button id="btn-delete-char" class="btn-delete">🗑️ ÇARI SİL</button>
+                <button id="btn-reset" class="btn-reset">↺ RESET</button>
+                <button id="btn-delete-char" class="btn-delete">🗑️ DEL CHAR</button>
             </div>
 
-            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FABRİKA AYARLARI</button>
+            <button id="btn-hard-reset" class="btn-hard-reset">⚠ FACTORY RESET</button>
         </div>
 
         <div class="panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:8px;">
-                <h2 id="title-inv" style="margin:0; border:none; padding:0;">Envanter</h2>
+                <h2 id="title-inv" style="margin:0; border:none; padding:0;">Inventory</h2>
             </div>
             <div class="inv-tabs">
                 <button id="btn-inv-order" class="inv-tab-btn active">ORDER</button>
@@ -182,12 +182,12 @@
         </div>
 
         <div class="panel">
-            <h2 id="title-res">Analiz Sonuçları</h2>
-            <div id="result-area"></div>
+            <h2 id="title-res">Analysis Results</h2>
+            <div id="result-area" style="color: #94a3b8; font-style: italic; text-align: center;">Results will appear here.</div>
         </div>
     </div>
 
-    <div id="debug-console">Hata Konsolu: Temiz</div>
+    <div id="debug-console">Console: Clean</div>
 
 <py-script>
 from js import document, window, localStorage
@@ -202,7 +202,7 @@ def log_error(e):
         err_div = document.getElementById("debug-console")
         if err_div:
             err_div.style.display = "block"
-            err_div.innerText = "HATA:\n" + str(e) + "\n" + str(traceback.format_exc())
+            err_div.innerText = "ERROR:\n" + str(e) + "\n" + str(traceback.format_exc())
     except: pass
 
 # --- DİL SÖZLÜĞÜ (TRANSLATION DICTIONARY) ---
@@ -277,9 +277,11 @@ LANG = {
     }
 }
 
-current_lang = "tr"
+# DEFAULT LANG IS NOW ENGLISH
+current_lang = "en"
+
 def T(key):
-    return LANG.get(current_lang, LANG["tr"]).get(key, key)
+    return LANG.get(current_lang, LANG["en"]).get(key, key)
 
 GEM_STATS = {
     "S": {"will": 3, "pts": 5, "color": "#ef4444"},
@@ -361,7 +363,7 @@ def apply_language():
         
         lang_btn = document.getElementById("btn-lang")
         if lang_btn:
-            lang_btn.innerText = "🇹🇷 TR" if current_lang == "en" else "🇬🇧 EN"
+            lang_btn.innerText = "🌐 TR" if current_lang == "en" else "🌐 EN"
             
         status_el = document.getElementById("status-msg")
         if status_el and ("Hazır" in status_el.innerText or "Ready" in status_el.innerText):
@@ -374,14 +376,14 @@ def apply_language():
         render_tabs() 
         
         res_div = document.getElementById("result-area")
-        if res_div and res_div.innerText != "":
+        if res_div and "===" not in res_div.innerText:
             res_div.innerText = ""
     except Exception as e: log_error(e)
 
 def toggle_lang(event):
     global current_lang
     try:
-        current_lang = "en" if current_lang == "tr" else "tr"
+        current_lang = "tr" if current_lang == "en" else "en"
         localStorage.setItem("astrogem_lang", current_lang)
         apply_language()
     except Exception as e: log_error(e)
@@ -414,7 +416,7 @@ def delete_character(event=None):
         if window.confirm(msg):
             del app_data[current_char]
             if not app_data:
-                app_data["Karakter 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
+                app_data["Character 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
             current_char = list(app_data.keys())[0]
             save_data()
             render_tabs()
@@ -584,13 +586,14 @@ def load_data():
     try:
         saved_lang = localStorage.getItem("astrogem_lang")
         if saved_lang in ["tr", "en"]: current_lang = saved_lang
+        else: current_lang = "en" # Varsayılan İngilizce
         
         stored = localStorage.getItem("astrogem_data")
         if stored: 
             app_data = json.loads(stored)
-            if not app_data: app_data = {"Karakter 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
+            if not app_data: app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
         else: 
-            app_data = {"Karakter 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
+            app_data = {"Character 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
         current_char = list(app_data.keys())[0]
         
         apply_language() 

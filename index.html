@@ -42,7 +42,6 @@
         
         h2 { color: #f1f5f9; margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 15px;}
         
-        /* YENİ: ENVANTER SEKMELERİ (ORDER / CHAOS) */
         .inv-tabs { display: flex; gap: 6px; margin-bottom: 12px; background: rgba(15, 23, 42, 0.6); padding: 6px; border-radius: 8px; border: 1px solid #334155; }
         .inv-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-weight: 800; font-size: 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin: 0; letter-spacing: 1px;}
         .inv-tab-btn.active { background: linear-gradient(135deg, #38bdf8, #818cf8); color: white; box-shadow: 0 4px 10px rgba(56, 189, 248, 0.2); }
@@ -100,6 +99,14 @@
         #joke-gif { max-width: 80%; max-height: 60vh; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid #38bdf8; }
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
         #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
+
+        /* DİL BUTONU */
+        #btn-lang {
+            position: absolute; right: 15px; top: 10px; background: #1e293b; color: #f8fafc; 
+            border: 1px solid #334155; border-radius: 8px; padding: 6px 12px; font-weight: 700; 
+            cursor: pointer; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: 0.2s;
+        }
+        #btn-lang:hover { background: #334155; border-color: #38bdf8; color: #38bdf8; }
     </style>
 </head>
 <body>
@@ -118,14 +125,17 @@
         ">KAPAT</button>
 </div>
     
-    <h1>Lost Ark Astrogem</h1>
-    <div id="status-msg">Sistem Yükleniyor...</div>
+    <div style="max-width: 1450px; margin: 0 auto; position: relative;">
+        <button id="btn-lang">🇬🇧 EN</button>
+        <h1>Lost Ark Astrogem</h1>
+        <div id="status-msg">Sistem Yükleniyor...</div>
+    </div>
 
     <div class="tabs" id="tab-container"></div>
 
     <div class="container">
         <div class="panel">
-            <h2>Core Ayarları</h2>
+            <h2 id="title-core">Core Ayarları</h2>
             <label>Sun Core:</label>
             <select id="core1">
                 <option value="12">Legendary (12 WP)</option>
@@ -159,7 +169,7 @@
 
         <div class="panel">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; border-bottom:1px solid #334155; padding-bottom:8px;">
-                <h2 style="margin:0; border:none; padding:0;">Envanter</h2>
+                <h2 id="title-inv" style="margin:0; border:none; padding:0;">Envanter</h2>
             </div>
             <div class="inv-tabs">
                 <button id="btn-inv-order" class="inv-tab-btn active">ORDER</button>
@@ -169,8 +179,8 @@
         </div>
 
         <div class="panel">
-            <h2>Analiz Sonuçları</h2>
-            <div id="result-area">Sonuçlar hesaplandığında burada görünecektir.</div>
+            <h2 id="title-res">Analiz Sonuçları</h2>
+            <div id="result-area"></div>
         </div>
     </div>
 
@@ -191,6 +201,82 @@ def log_error(e):
             err_div.style.display = "block"
             err_div.innerText = "HATA:\n" + str(e) + "\n" + str(traceback.format_exc())
     except: pass
+
+# --- DİL SÖZLÜĞÜ (TRANSLATION DICTIONARY) ---
+LANG = {
+    "tr": {
+        "core_settings": "Core Ayarları",
+        "inventory": "Envanter",
+        "results": "Analiz Sonuçları",
+        "calc_btn": "HESAPLA & KAYDET",
+        "reset_btn": "↺ SIFIRLA",
+        "del_btn": "🗑️ ÇARI SİL",
+        "hard_reset_btn": "⚠ FABRİKA AYARLARI",
+        "add_tab": "➕ Ekle",
+        "prompt_new": "Yeni karakterin adını girin:",
+        "alert_exists": "Bu isimde bir karakter zaten var!",
+        "created": "oluşturuldu",
+        "confirm_del": "isimli karakteri silmek istediğinize emin misiniz?",
+        "deleted": "Karakter silindi.",
+        "loaded": "Yüklendi",
+        "prompt_rename": "Karakter adını değiştir",
+        "calc_wait": "Hesaplanıyor... Lütfen bekleyin.",
+        "inv_empty": "Envanter boş. Lütfen taş ekleyin.",
+        "results_title": "SONUÇLARI",
+        "total_pts": "TOPLAM PUAN",
+        "success": "✅ BAŞARILI",
+        "fail": "❌ BAŞARISIZ",
+        "sub_target": "Ara Hedef",
+        "equip": "Takılacaklar",
+        "empty": "BOŞ",
+        "suggestion": "🎯 HEDEF ÖNERİSİ",
+        "need_find": "Bulunması Gereken",
+        "in_inv": "Envanterde var",
+        "new_layout": "Yeni Dizilim",
+        "reset_msg": "Sayılar Sıfırlandı.",
+        "hard_reset_warn": "DİKKAT: Tüm karakterler ve veriler silinecek. Emin misiniz?",
+        "sys_ready": "Sistem Hazır! 🎉",
+        "click_add": "Tıkla ve 1 Ekle"
+    },
+    "en": {
+        "core_settings": "Core Settings",
+        "inventory": "Inventory",
+        "results": "Analysis Results",
+        "calc_btn": "CALCULATE & SAVE",
+        "reset_btn": "↺ RESET",
+        "del_btn": "🗑️ DEL CHAR",
+        "hard_reset_btn": "⚠ FACTORY RESET",
+        "add_tab": "➕ Add",
+        "prompt_new": "Enter new character name:",
+        "alert_exists": "A character with this name already exists!",
+        "created": "created",
+        "confirm_del": "- Are you sure you want to delete this character?",
+        "deleted": "Character deleted.",
+        "loaded": "Loaded",
+        "prompt_rename": "Rename character",
+        "calc_wait": "Calculating... Please wait.",
+        "inv_empty": "Inventory is empty. Please add gems.",
+        "results_title": "RESULTS",
+        "total_pts": "TOTAL SCORE",
+        "success": "✅ SUCCESS",
+        "fail": "❌ FAILED",
+        "sub_target": "Sub-Target",
+        "equip": "Equip",
+        "empty": "EMPTY",
+        "suggestion": "🎯 SUGGESTION",
+        "need_find": "Need to Find",
+        "in_inv": "In inventory",
+        "new_layout": "New Layout",
+        "reset_msg": "Numbers Reset.",
+        "hard_reset_warn": "WARNING: All characters and data will be deleted. Are you sure?",
+        "sys_ready": "System Ready! 🎉",
+        "click_add": "Click to add 1"
+    }
+}
+
+current_lang = "tr"
+def T(key):
+    return LANG.get(current_lang, LANG["tr"]).get(key, key)
 
 GEM_STATS = {
     "S": {"will": 3, "pts": 5, "color": "#ef4444"},
@@ -216,7 +302,7 @@ GEM_STATS = {
     "V": {"will": 8, "pts": 5, "color": "#ec4899"}, 
     "W": {"will": 8, "pts": 4, "color": "#db2777"}, 
     "X": {"will": 8, "pts": 3, "color": "#be185d"}, 
-    "Y": {"will": 8, "pts": 2, "color": "#9d174d"},
+    "Y": {"will": 8, "pts": 2, "color": "#9d174d"}, 
 } 
 
 TARGET_SCORES = {12: 14, 15: 17, 17: 17}
@@ -224,7 +310,7 @@ SECONDARY_SCORES = {12: 10, 15: 14, 17: 14}
 TERTIARY_SCORES = {12: 10, 15: 10, 17: 10}
 
 current_char = ""
-current_inv_tab = "order" # Aktif envanter sekmesi
+current_inv_tab = "order" 
 app_data = {}
 ui_proxies = []
 
@@ -260,16 +346,52 @@ def check_for_joke(name):
             overlay.style.display = "flex"
     except Exception as e: log_error(e)
 
+def apply_language():
+    try:
+        document.getElementById("title-core").innerText = T("core_settings")
+        document.getElementById("title-inv").innerText = T("inventory")
+        document.getElementById("title-res").innerText = T("results")
+        document.getElementById("btn-calculate").innerText = T("calc_btn")
+        document.getElementById("btn-reset").innerText = T("reset_btn")
+        document.getElementById("btn-delete-char").innerText = T("del_btn")
+        document.getElementById("btn-hard-reset").innerText = T("hard_reset_btn")
+        
+        lang_btn = document.getElementById("btn-lang")
+        if lang_btn:
+            lang_btn.innerText = "🇹🇷 TR" if current_lang == "en" else "🇬🇧 EN"
+            
+        status_el = document.getElementById("status-msg")
+        if status_el and ("Hazır" in status_el.innerText or "Ready" in status_el.innerText):
+            status_el.innerText = T("sys_ready")
+            
+        for code in GEM_STATS.keys():
+            icon = document.getElementById("icon_" + code)
+            if icon: icon.title = T("click_add")
+            
+        render_tabs() 
+        
+        res_div = document.getElementById("result-area")
+        if res_div and res_div.innerText != "":
+            res_div.innerText = ""
+    except Exception as e: log_error(e)
+
+def toggle_lang(event):
+    global current_lang
+    try:
+        current_lang = "en" if current_lang == "tr" else "tr"
+        localStorage.setItem("astrogem_lang", current_lang)
+        apply_language()
+    except Exception as e: log_error(e)
+
 def add_character(event=None):
     try:
-        new_name = window.prompt("Yeni karakterin adını girin:")
+        new_name = window.prompt(T("prompt_new"))
         if new_name and new_name.strip():
             new_name = new_name.strip()
             if new_name in app_data:
-                window.alert("Bu isimde bir karakter zaten var!")
+                window.alert(T("alert_exists"))
                 return
             check_for_joke(new_name)
-            # İki envanter de oluşturuluyor
             app_data[new_name] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
             global current_char
             current_char = new_name
@@ -278,14 +400,15 @@ def add_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerText = "--- '" + current_char + "' oluşturuldu ---"
+                res_div.innerText = "--- '" + current_char + "' " + T("created") + " ---"
                 res_div.style.color = "#10b981"
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
     global current_char
     try:
-        if window.confirm("'" + current_char + "' isimli karakteri silmek istediğinize emin misiniz?"):
+        msg = f"'{current_char}' {T('confirm_del')}" if current_lang == "tr" else f"{T('confirm_del')} '{current_char}'?"
+        if window.confirm(msg):
             del app_data[current_char]
             if not app_data:
                 app_data["Karakter 1"] = {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}
@@ -295,7 +418,7 @@ def delete_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerText = "Karakter silindi.\n--- " + current_char + " Yüklendi ---"
+                res_div.innerText = T("deleted") + "\n--- " + current_char + " " + T("loaded") + " ---"
                 res_div.style.color = "#ef4444"
     except Exception as e: log_error(e)
 
@@ -328,7 +451,7 @@ def render_tabs():
             container.appendChild(btn)
             
         add_btn = document.createElement("button")
-        add_btn.innerText = "➕ Ekle"
+        add_btn.innerText = T("add_tab")
         add_btn.className = "tab-btn add-tab-btn"
         a_proxy = create_proxy(add_character)
         ui_proxies.append(a_proxy)
@@ -345,13 +468,13 @@ def switch_tab(new_name):
         load_ui_for_char(current_char)
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerText = "--- " + current_char + " Yüklendi ---"
+            res_div.innerText = "--- " + current_char + " " + T("loaded") + " ---"
             res_div.style.color = "#38bdf8"
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
     try:
-        new_name = window.prompt("Karakter adını değiştir (" + old_name + "):", old_name)
+        new_name = window.prompt(T("prompt_rename") + " (" + old_name + "):", old_name)
         if new_name and new_name.strip() and new_name != old_name:
             check_for_joke(new_name)
             data = app_data.pop(old_name)
@@ -362,11 +485,10 @@ def rename_tab(old_name):
             render_tabs()
     except Exception as e: log_error(e)
 
-# --- YENİ ENVANTER DEĞİŞTİRME FONKSİYONU ---
 def switch_inv_tab(tab):
     global current_inv_tab
     try:
-        save_data() # Geçiş yapmadan önce mevcut sayıları kaydet
+        save_data() 
         current_inv_tab = tab
         
         btn_o = document.getElementById("btn-inv-order")
@@ -379,14 +501,13 @@ def switch_inv_tab(tab):
                 btn_c.classList.add("active")
                 btn_o.classList.remove("active")
                 
-        load_ui_for_char(current_char) # Ekranı yeni sekmeye göre doldur
+        load_ui_for_char(current_char) 
     except Exception as e: log_error(e)
 
 def load_ui_for_char(name):
     try:
         data = app_data.get(name, {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]})
         
-        # GERİYE DÖNÜK UYUMLULUK: Eski "inventory" kayıtlarını "inventory_order" olarak aktarır. Kayıp yaşanmaz!
         if "inventory" in data:
             data["inventory_order"] = data.pop("inventory")
         if "inventory_chaos" not in data:
@@ -413,6 +534,23 @@ def load_ui_for_char(name):
         if c3: c3.selectedIndex = cores[2]
     except Exception as e: log_error(e)
 
+def get_ui_data():
+    inv = {}
+    try:
+        for code in GEM_STATS:
+            el = document.getElementById("gem_" + code)
+            if el:
+                val = el.value
+                inv[code] = int(val) if val else 0
+        return {"inventory": inv, "cores": [
+            document.getElementById("core1").selectedIndex,
+            document.getElementById("core2").selectedIndex,
+            document.getElementById("core3").selectedIndex
+        ]}
+    except Exception as e: 
+        log_error(e)
+        return {"inventory": {}, "cores": [0,0,0]}
+
 def save_data():
     global app_data
     try:
@@ -425,7 +563,6 @@ def save_data():
                 val = el.value
                 inv[code] = int(val) if val else 0
                 
-        # Hangi sekmedeysek oraya kaydeder
         if current_inv_tab == "order":
             app_data[current_char]["inventory_order"] = inv
         else:
@@ -440,8 +577,11 @@ def save_data():
     except Exception as e: log_error(e)
 
 def load_data():
-    global app_data, current_char
+    global app_data, current_char, current_lang
     try:
+        saved_lang = localStorage.getItem("astrogem_lang")
+        if saved_lang in ["tr", "en"]: current_lang = saved_lang
+        
         stored = localStorage.getItem("astrogem_data")
         if stored: 
             app_data = json.loads(stored)
@@ -449,7 +589,8 @@ def load_data():
         else: 
             app_data = {"Karakter 1": {"inventory_order": {}, "inventory_chaos": {}, "cores": [0,0,0]}}
         current_char = list(app_data.keys())[0]
-        render_tabs()
+        
+        apply_language() 
         load_ui_for_char(current_char)
     except Exception as e: log_error(e)
 
@@ -518,7 +659,7 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerText = "Hesaplanıyor... Lütfen bekleyin."
+        res_div.innerText = T("calc_wait")
         res_div.style.color = "#fbbf24"
         
         inventory = {}
@@ -545,7 +686,7 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerText = "Envanter boş. Lütfen taş ekleyin."
+            res_div.innerText = T("inv_empty")
             res_div.style.color = "#ef4444"
             return
 
@@ -635,9 +776,8 @@ def calculate_click(event):
         else:
             best_score = best_eval[6]
 
-        # BAŞLIĞA HANGİ ENVANTERİN KULLANILDIĞI EKLENDİ (ORDER/CHAOS)
-        output = "=== " + current_char + " (" + current_inv_tab.upper() + ") SONUÇLARI ===\n"
-        output += "TOPLAM PUAN: " + str(best_score) + "\n"
+        output = "=== " + current_char + " (" + current_inv_tab.upper() + ") " + T("results_title") + " ===\n"
+        output += T("total_pts") + ": " + str(best_score) + "\n"
         output += "-" * 35 + "\n"
         
         all_gems = list(GEM_STATS.keys())
@@ -657,18 +797,18 @@ def calculate_click(event):
             pts = res["pts"]
             
             if pts >= p_target:
-                status = "✅ BAŞARILI"
+                status = T("success")
             elif pts >= s_target:
-                status = "⚠️ (Ara Hedef " + str(s_target) + "P)"
+                status = "⚠️ (" + T("sub_target") + " " + str(s_target) + "P)"
             elif pts >= t_target:
-                status = "⚠️ (Ara Hedef " + str(t_target) + "P)"
+                status = "⚠️ (" + T("sub_target") + " " + str(t_target) + "P)"
             else:
-                status = "❌ BAŞARISIZ"
+                status = T("fail")
             
             output += "\n" + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
             
-            gem_str = " + ".join(res['gems']) if res['gems'] else "BOŞ"
-            output += "Takılacaklar: " + gem_str + "\n"
+            gem_str = " + ".join(res['gems']) if res['gems'] else T("empty")
+            output += T("equip") + ": " + gem_str + "\n"
             
             if p_target > pts:
                 sugs = []
@@ -701,10 +841,10 @@ def calculate_click(event):
                 if sugs:
                     sugs.sort(key=lambda x: (x["cost"], x["will_diff"], x["pts_diff"]))
                     s = sugs[0]
-                    miss_str = ", ".join(s['miss']) if s['miss'] else "Envanterde var"
-                    output += "\n[ 🎯 HEDEF ÖNERİSİ ]\n"
-                    output += "Bulunması Gereken: " + miss_str + "\n"
-                    output += "Yeni Dizilim: " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
+                    miss_str = ", ".join(s['miss']) if s['miss'] else T("in_inv")
+                    output += "\n[ " + T("suggestion") + " ]\n"
+                    output += T("need_find") + ": " + miss_str + "\n"
+                    output += T("new_layout") + ": " + "+".join(s['combo']) + " (" + str(s['will']) + "W)\n"
                     
             output += "-" * 35 + "\n"
         
@@ -720,13 +860,13 @@ def reset_click(event):
             if el: el.value = "0"
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerText = "Sayılar Sıfırlandı."
+            res_div.innerText = T("reset_msg")
             res_div.style.color = "#10b981"
         save_data()
     except Exception as e: log_error(e)
 
 def hard_reset_click(event):
-    if window.confirm("DİKKAT: Tüm karakterler ve veriler silinecek. Emin misiniz?"):
+    if window.confirm(T("hard_reset_warn")):
         localStorage.removeItem("astrogem_data")
         window.location.reload()
 
@@ -779,7 +919,6 @@ try:
                 icon_div.className = "gem-icon"
                 icon_div.style.backgroundColor = color
                 icon_div.id = "icon_" + code
-                icon_div.title = "Tıkla ve 1 Ekle"
                 icon_div.innerText = code
                 box_div.appendChild(icon_div)
                 
@@ -812,7 +951,7 @@ try:
             ui_proxies.append(change_proxy)
             input_el.addEventListener("change", change_proxy)
 
-    # Sekme değiştirme olaylarını bağla
+    # Sekme olayları
     btn_order = document.getElementById("btn-inv-order")
     if btn_order:
         order_proxy = create_proxy(lambda e: switch_inv_tab("order"))
@@ -824,6 +963,13 @@ try:
         chaos_proxy = create_proxy(lambda e: switch_inv_tab("chaos"))
         ui_proxies.append(chaos_proxy)
         btn_chaos.addEventListener("click", chaos_proxy)
+
+    # Dil butonu olayları
+    lang_btn = document.getElementById("btn-lang")
+    if lang_btn:
+        lang_proxy = create_proxy(toggle_lang)
+        ui_proxies.append(lang_proxy)
+        lang_btn.addEventListener("click", lang_proxy)
 
     load_data()
     
@@ -853,7 +999,7 @@ try:
     
     status_msg = document.getElementById("status-msg")
     if status_msg:
-        status_msg.innerText = "Sistem Hazır! 🎉"
+        status_msg.innerText = T("sys_ready")
         status_msg.style.color = "#10b981"
 
 except Exception as e: 
@@ -862,4 +1008,3 @@ except Exception as e:
 </py-script>
 </body>
 </html>
-

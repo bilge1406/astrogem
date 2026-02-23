@@ -408,7 +408,9 @@ def add_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>--- '" + current_char + "' " + T("created") + " ---</div>"
+                res_div.innerText = "--- '" + current_char + "' " + T("created") + " ---"
+                res_div.style.color = "#10b981"
+                res_div.style.textAlign = "center"
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
@@ -425,7 +427,9 @@ def delete_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerHTML = "<div style='color:#ef4444; text-align:center;'>" + T("deleted") + "<br>--- " + current_char + " " + T("loaded") + " ---</div>"
+                res_div.innerText = T("deleted") + "\n--- " + current_char + " " + T("loaded") + " ---"
+                res_div.style.color = "#ef4444"
+                res_div.style.textAlign = "center"
     except Exception as e: log_error(e)
 
 def switch_tab_event(event):
@@ -474,7 +478,9 @@ def switch_tab(new_name):
         load_ui_for_char(current_char)
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerHTML = "<div style='color:#38bdf8; text-align:center;'>--- " + current_char + " " + T("loaded") + " ---</div>"
+            res_div.innerText = "--- " + current_char + " " + T("loaded") + " ---"
+            res_div.style.color = "#38bdf8"
+            res_div.style.textAlign = "center"
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
@@ -665,7 +671,9 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerHTML = "<div style='text-align:center; color: #fbbf24;'>" + T("calc_wait") + "</div>"
+        res_div.innerText = T("calc_wait")
+        res_div.style.color = "#fbbf24"
+        res_div.style.textAlign = "center"
         
         inventory = {}
         for code in GEM_STATS:
@@ -691,7 +699,9 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerHTML = "<div style='color: #ef4444; text-align:center;'>" + T("inv_empty") + "</div>"
+            res_div.innerText = T("inv_empty")
+            res_div.style.color = "#ef4444"
+            res_div.style.textAlign = "center"
             return
 
         pools = []
@@ -787,8 +797,6 @@ def calculate_click(event):
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
         
-        # OYUN İÇİ İKONLARIN DOSYA İSİMLERİ BURAYA YAZILACAK
-        # Kendi resimlerini klasöre koyup isimlerini aşağıdaki gibi yapmalısın.
         order_icons = ["sun_order.png", "moon_order.png", "star_order.png"]
         chaos_icons = ["sun_chaos.png", "moon_chaos.png", "star_chaos.png"]
         icons = order_icons if current_inv_tab == "order" else chaos_icons
@@ -815,7 +823,6 @@ def calculate_click(event):
             else:
                 status = T("fail")
             
-            # RESİM ETİKETİNİ (IMG) GÜVENLİ ŞEKİLDE EKLİYORUZ
             img_tag = "<im" + "g src='" + icons[i] + "' alt='icon' style='width:24px; height:24px; vertical-align:middle; margin-right:8px; border-radius:4px;'>"
             output += "\n" + img_tag + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
             
@@ -860,9 +867,9 @@ def calculate_click(event):
                     
             output += "-" * 35 + "\n"
         
-        # Resimlerin çalışması için innerHTML kullanılıyor
         res_div.innerHTML = output
         res_div.style.color = "#e2e8f0" 
+        res_div.style.textAlign = "left"
 
     except Exception as e: log_error(e)
                             
@@ -873,7 +880,9 @@ def reset_click(event):
             if el: el.value = "0"
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>" + T("reset_msg") + "</div>"
+            res_div.innerText = T("reset_msg")
+            res_div.style.color = "#10b981"
+            res_div.style.textAlign = "center"
         save_data()
     except Exception as e: log_error(e)
 

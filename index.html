@@ -27,7 +27,7 @@
         
         #status-msg { text-align:center; color: #fbbf24; font-weight: 600; font-size: 13px; margin-bottom: 15px; letter-spacing: 0.5px;}
         
-        .container { max-width: 1450px; margin: 0 auto; display: grid; grid-template-columns: 280px 480px 1fr; gap: 15px; align-items: start; }
+        .container { max-width: 1450px; margin: 0 auto; display: grid; grid-template-columns: 260px 480px 1fr; gap: 15px; align-items: start; }
         @media (max-width: 1150px) { .container { grid-template-columns: 1fr; } }
 
         .panel { 
@@ -40,7 +40,7 @@
         .panel:nth-child(2)::before { background: linear-gradient(to right, #3b82f6, #8b5cf6); } 
         .panel:nth-child(3)::before { background: linear-gradient(to right, #10b981, #3b82f6); } 
         
-        h2 { color: #f1f5f9; margin-top: 0; font-size: 1.1rem; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 15px;}
+        h2 { color: #f1f5f9; margin-top: 0; font-size: 1.1rem; }
         
         .inv-tabs { display: flex; gap: 6px; margin-bottom: 12px; background: rgba(15, 23, 42, 0.6); padding: 6px; border-radius: 8px; border: 1px solid #334155; }
         .inv-tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: #94a3b8; font-weight: 800; font-size: 12px; border-radius: 6px; cursor: pointer; transition: all 0.2s; margin: 0; letter-spacing: 1px;}
@@ -68,7 +68,7 @@
         
         select { width: 100%; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
-        label { font-weight: 600; color: #94a3b8; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;}
+        label { font-weight: 600; color: #94a3b8; display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;}
         
         button { width: 100%; padding: 10px; margin-top: 8px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 13px; transition: all 0.2s; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn-calc { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 14px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2); margin-top: 25px;} 
@@ -116,8 +116,7 @@
         #btn-lang:hover { background: #334155; border-color: #38bdf8; color: white; }
 
         .core-row { margin-bottom: 15px; }
-        .core-header { display: flex; justify-content: space-between; margin-bottom: 4px; align-items: flex-end; }
-        .auto-label { font-size: 11px; color: #94a3b8; cursor: pointer; display: flex; align-items: center; gap: 4px; font-weight: 600; }
+        .auto-label { font-size: 12px; color: #38bdf8; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 700; }
         .auto-label input { cursor: pointer; }
         .core-flex { display: flex; gap: 8px; align-items: center; }
         .target-box { flex: 1; align-items: center; gap: 6px; }
@@ -151,15 +150,16 @@
 
     <div class="container">
         <div class="panel">
-            <h2 id="title-core">Core Settings</h2>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155; padding-bottom: 8px; margin-bottom: 15px;">
+                <h2 id="title-core" style="margin: 0; border: none; padding: 0;">Core Settings</h2>
+                <label class="auto-label">
+                    <input type="checkbox" id="auto_master" checked> <span id="lbl-auto-master">Auto</span>
+                </label>
+            </div>
             
             <div class="core-row">
-                <div class="core-header">
-                    <label style="margin:0;">Sun Core:</label>
-                    <label class="auto-label">
-                        <input type="checkbox" id="auto1" checked> <span id="lbl-auto1">Auto</span>
-                    </label>
-                </div>
+                <label style="margin-bottom: 6px;">Sun Core:</label>
                 <div class="core-flex">
                     <select id="core1" style="flex: 1; margin:0;">
                         <option value="12">Legendary (12 WP)</option>
@@ -179,12 +179,7 @@
             </div>
 
             <div class="core-row">
-                <div class="core-header">
-                    <label style="margin:0;">Moon Core:</label>
-                    <label class="auto-label">
-                        <input type="checkbox" id="auto2" checked> <span id="lbl-auto2">Auto</span>
-                    </label>
-                </div>
+                <label style="margin-bottom: 6px;">Moon Core:</label>
                 <div class="core-flex">
                     <select id="core2" style="flex: 1; margin:0;">
                         <option value="12">Legendary (12 WP)</option>
@@ -204,12 +199,7 @@
             </div>
 
             <div class="core-row">
-                <div class="core-header">
-                    <label style="margin:0;">Star Core:</label>
-                    <label class="auto-label">
-                        <input type="checkbox" id="auto3" checked> <span id="lbl-auto3">Auto</span>
-                    </label>
-                </div>
+                <label style="margin-bottom: 6px;">Star Core:</label>
                 <div class="core-flex">
                     <select id="core3" style="flex: 1; margin:0;">
                         <option value="12">Legendary (12 WP)</option>
@@ -441,9 +431,10 @@ def apply_language():
         document.getElementById("btn-delete-char").innerText = T("del_btn")
         document.getElementById("btn-hard-reset").innerText = T("hard_reset_btn")
         
+        lbl_auto_master = document.getElementById("lbl-auto-master")
+        if lbl_auto_master: lbl_auto_master.innerText = T("auto_target")
+        
         for i in range(1,4):
-            lbl_auto = document.getElementById(f"lbl-auto{i}")
-            if lbl_auto: lbl_auto.innerText = T("auto_target")
             lbl_tgt = document.getElementById(f"lbl-tgt{i}")
             if lbl_tgt: lbl_tgt.innerText = T("lbl_target")
 
@@ -606,26 +597,26 @@ def load_ui_for_char(name):
         targets = data.get("targets", [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}])
         if not targets or len(targets) < 3:
             targets = [{"auto":True, "val":17},{"auto":True, "val":17},{"auto":True, "val":17}]
+            
+        master_auto = targets[0]["auto"]
         
         for code in GEM_STATS:
             el = document.getElementById("gem_" + code)
             if el: el.value = str(inv.get(code, 0))
         
+        master_el = document.getElementById("auto_master")
+        if master_el: master_el.checked = master_auto
+        
         for i in range(1, 4):
             c_el = document.getElementById(f"core{i}")
             if c_el: c_el.selectedIndex = cores[i-1]
             
-            a_el = document.getElementById(f"auto{i}")
             t_el = document.getElementById(f"target{i}")
             box = document.getElementById(f"box-target{i}")
             
-            if a_el and t_el and box:
-                a_el.checked = targets[i-1]["auto"]
+            if t_el and box:
                 t_el.value = str(targets[i-1]["val"])
-                if a_el.checked:
-                    box.style.display = "none"
-                else:
-                    box.style.display = "flex"
+                box.style.display = "none" if master_auto else "flex"
                     
     except Exception as e: log_error(e)
 
@@ -638,12 +629,14 @@ def get_ui_data():
                 val = el.value
                 inv[code] = int(val) if val else 0
                 
+        master_el = document.getElementById("auto_master")
+        is_auto = master_el.checked if master_el else True
+        
         targets = []
         for i in range(1, 4):
-            a_el = document.getElementById(f"auto{i}")
             t_el = document.getElementById(f"target{i}")
-            if a_el and t_el:
-                targets.append({"auto": a_el.checked, "val": int(t_el.value)})
+            if t_el:
+                targets.append({"auto": is_auto, "val": int(t_el.value)})
             else:
                 targets.append({"auto": True, "val": 17})
                 
@@ -772,16 +765,19 @@ def calculate_click(event):
         primaries = []
         secondaries = []
         tertiaries = []
+        
+        master_el = document.getElementById("auto_master")
+        is_auto = master_el.checked if master_el else True
+        
         for i in range(1, 4):
             el = document.getElementById("core" + str(i))
-            auto_el = document.getElementById("auto" + str(i))
             tgt_el = document.getElementById("target" + str(i))
             
-            if el and auto_el and tgt_el:
+            if el and tgt_el:
                 val = int(el.value)
                 core_caps.append(val)
                 
-                if auto_el.checked:
+                if is_auto:
                     p_tgt = TARGET_SCORES[val]
                     s_tgt = SECONDARY_SCORES[val]
                     t_tgt = TERTIARY_SCORES[val]
@@ -1006,13 +1002,13 @@ def on_gem_change(event):
         save_data()
     except Exception as e: log_error(e)
 
-def on_auto_change(event):
+def on_master_auto_change(event):
     try:
-        idx = event.currentTarget.id[-1]
         is_auto = event.currentTarget.checked
-        box = document.getElementById("box-target" + idx)
-        if box:
-            box.style.display = "none" if is_auto else "flex"
+        for i in range(1, 4):
+            box = document.getElementById(f"box-target{i}")
+            if box:
+                box.style.display = "none" if is_auto else "flex"
         save_data()
     except Exception as e: log_error(e)
 
@@ -1083,13 +1079,13 @@ try:
             input_el.addEventListener("change", change_proxy)
 
     # Core ve Target Ayar Olayları
+    master_auto_el = document.getElementById("auto_master")
+    if master_auto_el:
+        ap_proxy = create_proxy(on_master_auto_change)
+        ui_proxies.append(ap_proxy)
+        master_auto_el.addEventListener("change", ap_proxy)
+
     for i in range(1, 4):
-        auto_el = document.getElementById("auto" + str(i))
-        if auto_el:
-            ap_proxy = create_proxy(on_auto_change)
-            ui_proxies.append(ap_proxy)
-            auto_el.addEventListener("change", ap_proxy)
-            
         tgt_el = document.getElementById("target" + str(i))
         if tgt_el:
             tp_proxy = create_proxy(on_gem_change)

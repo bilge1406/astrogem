@@ -10,6 +10,14 @@
     <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
 
     <style>
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield; /* Firefox desteği için */
+        }
         body { 
             background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; 
             margin: 0; padding: 15px; 
@@ -164,7 +172,7 @@
             
             <div style="display: flex; gap: 8px;">
                 <button id="btn-reset" class="btn-reset">↺ RESET</button>
-                <button id="btn-delete-char" class="btn-delete">🗑️ DEL CHAR</button>
+                <button id="btn-delete-char" class="btn-delete">🗑️ DELETE CHARACTER</button>
             </div>
 
             <button id="btn-hard-reset" class="btn-hard-reset">⚠ FACTORY RESET</button>
@@ -227,8 +235,8 @@ LANG = {
         "inv_empty": "Envanter boş. Lütfen taş ekleyin.",
         "results_title": "SONUÇLARI",
         "total_pts": "TOPLAM PUAN",
-        "success": "✅ BAŞARILI",
-        "fail": "❌ BAŞARISIZ",
+        "success": "✅",
+        "fail": "❌",
         "sub_target": "Ara Hedef",
         "equip": "Takılacaklar",
         "empty": "BOŞ",
@@ -238,7 +246,7 @@ LANG = {
         "new_layout": "Yeni Dizilim",
         "reset_msg": "Sayılar Sıfırlandı.",
         "hard_reset_warn": "DİKKAT: Tüm karakterler ve veriler silinecek. Emin misiniz?",
-        "sys_ready": "Sistem Hazır! 🎉",
+        "sys_ready": "",
         "click_add": "Tıkla ve 1 Ekle"
     },
     "en": {
@@ -247,7 +255,7 @@ LANG = {
         "results": "Analysis Results",
         "calc_btn": "CALCULATE & SAVE",
         "reset_btn": "↺ RESET",
-        "del_btn": "🗑️ DEL CHAR",
+        "del_btn": "🗑️ DELETE CHARACTER",
         "hard_reset_btn": "⚠ FACTORY RESET",
         "add_tab": "➕ Add",
         "prompt_new": "Enter new character name:",
@@ -272,7 +280,7 @@ LANG = {
         "new_layout": "New Layout",
         "reset_msg": "Numbers Reset.",
         "hard_reset_warn": "WARNING: All characters and data will be deleted. Are you sure?",
-        "sys_ready": "System Ready! 🎉",
+        "sys_ready": "",
         "click_add": "Click to add 1"
     }
 }
@@ -1014,3 +1022,4 @@ except Exception as e:
 </py-script>
 </body>
 </html>
+

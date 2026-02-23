@@ -10,14 +10,6 @@
     <script defer src="https://pyscript.net/releases/2023.05.1/pyscript.js"></script>
 
     <style>
-        input[type=number]::-webkit-inner-spin-button, 
-        input[type=number]::-webkit-outer-spin-button { 
-            -webkit-appearance: none; 
-            margin: 0; 
-        }
-        input[type=number] {
-            -moz-appearance: textfield; /* Firefox desteği için */
-        }
         body { 
             background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; 
             margin: 0; padding: 15px; 
@@ -67,6 +59,12 @@
         
         .gem-box input[type="number"] { width: 100%; padding: 4px 0; font-size: 13px; background: #1e293b; border-radius: 6px; box-sizing: border-box; text-align: center; border: 1px solid transparent; color: white;}
         .gem-box input[type="number"]:focus { outline: none; border-color: #38bdf8; }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; margin: 0; 
+        }
+        input[type=number] { -moz-appearance: textfield; }
         
         select { width: 100%; margin-bottom: 12px; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 13px; font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; border: 1px solid #334155; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1em; }
         select:focus { outline: none; border-color: #38bdf8; box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2); }
@@ -108,7 +106,6 @@
         #joke-text { color: white; font-size: 32px; margin-top: 30px; text-align: center; text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: 800; padding: 0 20px; letter-spacing: 1px; }
         #joke-close { width: 200px; margin-top: 40px; padding: 15px; font-size: 16px; background: #ef4444; }
 
-        /* DÜNYA İKONLU DİL BUTONU - SOL ÜST KÖŞE VE KÜÇÜK */
         #btn-lang {
             position: fixed; left: 20px; top: 20px; width: auto; margin: 0;
             background: #1e293b; color: #94a3b8; border: 1px solid #334155; 
@@ -172,7 +169,7 @@
             
             <div style="display: flex; gap: 8px;">
                 <button id="btn-reset" class="btn-reset">↺ RESET</button>
-                <button id="btn-delete-char" class="btn-delete">🗑️ DELETE CHARACTER</button>
+                <button id="btn-delete-char" class="btn-delete">🗑️ DEL CHAR</button>
             </div>
 
             <button id="btn-hard-reset" class="btn-hard-reset">⚠ FACTORY RESET</button>
@@ -213,7 +210,6 @@ def log_error(e):
             err_div.innerText = "ERROR:\n" + str(e) + "\n" + str(traceback.format_exc())
     except: pass
 
-# --- DİL SÖZLÜĞÜ (TRANSLATION DICTIONARY) ---
 LANG = {
     "tr": {
         "core_settings": "Core Ayarları",
@@ -235,8 +231,8 @@ LANG = {
         "inv_empty": "Envanter boş. Lütfen taş ekleyin.",
         "results_title": "SONUÇLARI",
         "total_pts": "TOPLAM PUAN",
-        "success": "✅",
-        "fail": "❌",
+        "success": "✅ BAŞARILI",
+        "fail": "❌ BAŞARISIZ",
         "sub_target": "Ara Hedef",
         "equip": "Takılacaklar",
         "empty": "BOŞ",
@@ -246,7 +242,7 @@ LANG = {
         "new_layout": "Yeni Dizilim",
         "reset_msg": "Sayılar Sıfırlandı.",
         "hard_reset_warn": "DİKKAT: Tüm karakterler ve veriler silinecek. Emin misiniz?",
-        "sys_ready": "",
+        "sys_ready": "Sistem Hazır! 🎉",
         "click_add": "Tıkla ve 1 Ekle"
     },
     "en": {
@@ -255,7 +251,7 @@ LANG = {
         "results": "Analysis Results",
         "calc_btn": "CALCULATE & SAVE",
         "reset_btn": "↺ RESET",
-        "del_btn": "🗑️ DELETE CHARACTER",
+        "del_btn": "🗑️ DEL CHAR",
         "hard_reset_btn": "⚠ FACTORY RESET",
         "add_tab": "➕ Add",
         "prompt_new": "Enter new character name:",
@@ -280,12 +276,11 @@ LANG = {
         "new_layout": "New Layout",
         "reset_msg": "Numbers Reset.",
         "hard_reset_warn": "WARNING: All characters and data will be deleted. Are you sure?",
-        "sys_ready": "",
+        "sys_ready": "System Ready! 🎉",
         "click_add": "Click to add 1"
     }
 }
 
-# DEFAULT LANG IS NOW ENGLISH
 current_lang = "en"
 
 def T(key):
@@ -413,8 +408,7 @@ def add_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerText = "--- '" + current_char + "' " + T("created") + " ---"
-                res_div.style.color = "#10b981"
+                res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>--- '" + current_char + "' " + T("created") + " ---</div>"
     except Exception as e: log_error(e)
 
 def delete_character(event=None):
@@ -431,8 +425,7 @@ def delete_character(event=None):
             load_ui_for_char(current_char)
             res_div = document.getElementById("result-area")
             if res_div: 
-                res_div.innerText = T("deleted") + "\n--- " + current_char + " " + T("loaded") + " ---"
-                res_div.style.color = "#ef4444"
+                res_div.innerHTML = "<div style='color:#ef4444; text-align:center;'>" + T("deleted") + "<br>--- " + current_char + " " + T("loaded") + " ---</div>"
     except Exception as e: log_error(e)
 
 def switch_tab_event(event):
@@ -481,8 +474,7 @@ def switch_tab(new_name):
         load_ui_for_char(current_char)
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerText = "--- " + current_char + " " + T("loaded") + " ---"
-            res_div.style.color = "#38bdf8"
+            res_div.innerHTML = "<div style='color:#38bdf8; text-align:center;'>--- " + current_char + " " + T("loaded") + " ---</div>"
     except Exception as e: log_error(e)
 
 def rename_tab(old_name):
@@ -594,7 +586,7 @@ def load_data():
     try:
         saved_lang = localStorage.getItem("astrogem_lang")
         if saved_lang in ["tr", "en"]: current_lang = saved_lang
-        else: current_lang = "en" # Varsayılan İngilizce
+        else: current_lang = "en" 
         
         stored = localStorage.getItem("astrogem_data")
         if stored: 
@@ -673,8 +665,7 @@ def calculate_click(event):
         save_data()
         res_div = document.getElementById("result-area")
         if not res_div: return
-        res_div.innerText = T("calc_wait")
-        res_div.style.color = "#fbbf24"
+        res_div.innerHTML = "<div style='text-align:center; color: #fbbf24;'>" + T("calc_wait") + "</div>"
         
         inventory = {}
         for code in GEM_STATS:
@@ -700,8 +691,7 @@ def calculate_click(event):
         
         available_types = list(inventory.keys())
         if not available_types:
-            res_div.innerText = T("inv_empty")
-            res_div.style.color = "#ef4444"
+            res_div.innerHTML = "<div style='color: #ef4444; text-align:center;'>" + T("inv_empty") + "</div>"
             return
 
         pools = []
@@ -797,6 +787,12 @@ def calculate_click(event):
         all_gems = list(GEM_STATS.keys())
         core_names = ["Sun Core", "Moon Core", "Star Core"] 
         
+        # OYUN İÇİ İKONLARIN DOSYA İSİMLERİ BURAYA YAZILACAK
+        # Kendi resimlerini klasöre koyup isimlerini aşağıdaki gibi yapmalısın.
+        order_icons = ["sun_order.png", "moon_order.png", "star_order.png"]
+        chaos_icons = ["sun_chaos.png", "moon_chaos.png", "star_chaos.png"]
+        icons = order_icons if current_inv_tab == "order" else chaos_icons
+        
         remaining_inv = inventory.copy()
         for res in best_assign:
             for g in res["gems"]:
@@ -819,7 +815,9 @@ def calculate_click(event):
             else:
                 status = T("fail")
             
-            output += "\n" + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
+            # RESİM ETİKETİNİ (IMG) GÜVENLİ ŞEKİLDE EKLİYORUZ
+            img_tag = "<im" + "g src='" + icons[i] + "' alt='icon' style='width:24px; height:24px; vertical-align:middle; margin-right:8px; border-radius:4px;'>"
+            output += "\n" + img_tag + core_names[i] + " (" + str(cap) + "W): " + str(pts) + " / " + str(p_target) + " " + status + "\n"
             
             gem_str = " + ".join(res['gems']) if res['gems'] else T("empty")
             output += T("equip") + ": " + gem_str + "\n"
@@ -862,7 +860,8 @@ def calculate_click(event):
                     
             output += "-" * 35 + "\n"
         
-        res_div.innerText = output
+        # Resimlerin çalışması için innerHTML kullanılıyor
+        res_div.innerHTML = output
         res_div.style.color = "#e2e8f0" 
 
     except Exception as e: log_error(e)
@@ -874,8 +873,7 @@ def reset_click(event):
             if el: el.value = "0"
         res_div = document.getElementById("result-area")
         if res_div: 
-            res_div.innerText = T("reset_msg")
-            res_div.style.color = "#10b981"
+            res_div.innerHTML = "<div style='color:#10b981; text-align:center;'>" + T("reset_msg") + "</div>"
         save_data()
     except Exception as e: log_error(e)
 
@@ -1022,4 +1020,3 @@ except Exception as e:
 </py-script>
 </body>
 </html>
-

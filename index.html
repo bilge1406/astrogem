@@ -1008,6 +1008,19 @@ def increment_gem(event):
             save_data()
     except Exception as e: log_error(e)
 
+def decrement_gem(event):
+    try:
+        event.preventDefault() # Tarayıcının varsayılan sağ tık menüsünü açmasını engeller
+        code = event.currentTarget.id.split("_")[1]
+        el = document.getElementById("gem_" + code)
+        if el:
+            val = int(el.value) if el.value else 0
+            if val > 0: # 0'ın altına düşmesini engeller
+                el.value = str(val - 1)
+                save_data()
+    except Exception as e: log_error(e)
+            
+
 def on_gem_change(event):
     try:
         save_data()
@@ -1082,6 +1095,10 @@ try:
             i_proxy = create_proxy(increment_gem)
             ui_proxies.append(i_proxy)
             icon_el.addEventListener("click", i_proxy)
+
+            d_proxy = create_proxy(decrement_gem)
+            ui_proxies.append(d_proxy)
+            icon_el.addEventListener("contextmenu", d_proxy)
         
         input_el = document.getElementById("gem_" + code)
         if input_el:
@@ -1164,5 +1181,6 @@ except Exception as e:
 </py-script>
 </body>
 </html>
+
 
 

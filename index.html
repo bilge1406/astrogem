@@ -800,8 +800,12 @@ def calculate_click(event):
 
         pools = []
         for i in range(3):
-            candidates = get_valid_combos(core_caps[i], inventory, available_types, primaries[i], secondaries[i], tertiaries[i])
-            pools.append(candidates)
+            if primaries[i] == 0:
+                # Hedef 0 ise sadece "Boş" ihtimalini ekle, taş harcama
+                pools.append([{"pts": 0, "will": 0, "gems": [], "counts": {}}])
+            else:
+                candidates = get_valid_combos(core_caps[i], inventory, available_types, primaries[i], secondaries[i], tertiaries[i])
+                pools.append(candidates)
 
         best_eval = (-1, -1, -1, -1, -1, -1, -1, -1)
         best_assign = []
@@ -874,13 +878,17 @@ def calculate_click(event):
             best_assign = []
             curr_inv = inventory.copy()
             for i in range(3):
-                cands = get_valid_combos(core_caps[i], curr_inv, list(curr_inv.keys()), primaries[i], secondaries[i], tertiaries[i])
-                best = cands[0] if cands else {"pts":0, "gems":[]}
-                if best["gems"]:
+                if primaries[i] == 0:
+                    best = {"pts": 0, "will": 0, "gems": [], "counts": {}}
+                else:
+                    cands = get_valid_combos(core_caps[i], curr_inv, list(curr_inv.keys()), primaries[i], secondaries[i], tertiaries[i])
+                    best = cands[0] if cands else {"pts":0, "will":0, "gems":[], "counts":{}}
+                
+                if best.get("gems"):
                     for g in best["gems"]: 
                         if curr_inv.get(g,0)>0: curr_inv[g]-=1
                 best_assign.append(best)
-                best_score += best["pts"]
+                best_score += best.get("pts", 0)
         else:
             best_score = best_eval[6]
 
@@ -1156,4 +1164,5 @@ except Exception as e:
 </py-script>
 </body>
 </html>
+
 
